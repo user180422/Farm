@@ -1,0 +1,11 @@
+.secondary {
+    background-color: black;
+    color: white;
+}
+
+.line-adjust{
+    font-size: 18px;
+    line-height: 30px;
+    letter-spacing: 2px;
+}
+

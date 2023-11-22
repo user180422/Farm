@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Farm</title>
+    <script src="https://kit.fontawesome.com/68d0b9a83f.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- nav -->
+
+    <div class="container-fluid nav-bg sticky">
+        <div class="container py-2 nav-bg">
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid">
+                    <a class="navbar-brand nav-space fw-bold text-white" href="#">Render Farm</a>
+                    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent" data-aos="fade-left">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+                        <form class="d-flex" role="search">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item px-2">
+                                    <a class="nav-link rounded nav-space nav-link-hover text-white" aria-current="page"
+                                        href="/index.html">Home</a>
+                                </li>
+                                <li class="nav-item px-2">
+                                    <a class="nav-link rounded nav-space nav-link-hover text-white" aria-current="page"
+                                        href="/renderNow.html">Render Now</a>
+                                </li>
+                                <li class="nav-item px-2">
+                                    <a class="nav-link rounded nav-space nav-link-hover text-white" aria-current="page"
+                                        href="/index.html#pricing">Pricing</a>
+                                </li>
+                                <li class="nav-item px-2">
+                                    <a class="nav-link rounded nav-space nav-link-hover text-white" aria-current="page"
+                                        href="/about.html">About Us</a>
+                                </li>
+                                <li class="nav-item px-2">
+                                    <a class="nav-link rounded nav-space nav-link-hover text-white" aria-current="page"
+                                        href="/support.html">Support</a>
+                                </li>
+                                <li class="nav-item px-2">
+                                    <a class="nav-link rounded nav-space nav-link-hover text-white" aria-current="page"
+                                        href="/getQuote.html">Get a Quote</a>
+                                </li>
+                                <li class="nav-item px-2">
+                                    <a class="nav-link rounded nav-space nav-link-hover text-white" id="Register" aria-current="page"
+                                        href="/login.html">Login</a>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+    </div>
+
+    <!-- header -->
+
+    <div class="video-container" style="height: 700px;">
+        <img src="./Images/robynne-hu-HOrhCnQsxnQ-unsplash.jpg" alt="Your Image Description"
+            style="height: 100%; width: 100%;">
+        <div class="text-overlay" data-aos="zoom-in">
+            <h1 class="display-1">Cloud <span class="nav-span-color">Rendering</span> Service</h1>
+            <p class="h1">Remote GPU Render Farm</p>
+        </div>
+    </div>
+
+    <div class="container-fluid my-5">
+        <div class="container" data-aos="zoom-in">
+            <h1 class="h1 text-center">
+                Render Farm <br><span class="nav-span-color fw-bolder">GPU-Accelerated Cloud</span> Render Farm.
+            </h1>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row text-center g-lg-5 d-flex gap-3">
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 pop flex-fill" data-aos="fade-up" data-aos-duration="1500">
+                <div class=" card-para-height d-flex flex-column justify-content-center align-items-center gap-4">
+                    <i class="fa-solid card-icon fa-pen-nib"></i>
+                    <p class="h-100">
+                        Easy to Use
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 pop flex-fill" data-aos="fade-up" data-aos-duration="1500">
+                <div class=" card-para-height d-flex flex-column justify-content-center align-items-center gap-4">
+                    <i class="fa-solid card-icon fa-gift"></i>
+                    <p class="h-100">
+                        Multiple Software & Plugins Supported
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 pop flex-fill" data-aos="fade-up" data-aos-duration="1500">
+                <div class=" card-para-height d-flex flex-column justify-content-center align-items-center gap-4">
+                    <i class="fa-solid card-icon fa-film"></i>
+                    <p class="h-100">
+                        Flexible Render Farm Pricing
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 pop flex-fill" data-aos="fade-up" data-aos-duration="1500">
+                <div class=" card-para-height d-flex flex-column justify-content-center align-items-center gap-4">
+                    <i class="fa-solid card-icon fa-gear"></i>
+                    <p class="h-100">
+                        Dedicated Service Team
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 pop flex-fill" data-aos="fade-up" data-aos-duration="1500">
+                <div class=" card-para-height d-flex flex-column justify-content-center align-items-center gap-4">
+                    <i class="fa-solid card-icon fa-list"></i>
+                    <p class="h-100">
+                        Secure & Confidential
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid secondary text-center">
+        <div class="container d-flex flex-column justify-content-center align-items-center p-5">
+            <div data-aos="fade-right">
+                <h1 class="h1">
+                    iRender <span class="nav-span-color">GPU-Accelerated Cloud</span> Render Farm.
+                </h1>
+            </div>
+
+            <div class="w-75" data-aos="fade-left">
+                <span class="nav-space">
+                    We Concentrate On People and The Joy Of Creation.
+                    Optimize for (Redshift, Octane, Blender, V-Ray Next, Iray, UE5, Omniverse etc.) Multi-GPU Rendering
+                    Tasks.
+                    The Official Render Farm partner of Maxon.
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row text-center g-lg-5 d-flex gap-3">
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 pop flex-fill" data-aos="zoom-in">
+                <div
+                    class=" border shadow-sm rounded d-flex flex-column justify-content-center align-items-center gap-4 p-4 h-100">
+                    <img src="./Images/dns-svgrepo-com.svg" height="50px" width="50px" alt="" srcset="">
+                    <span class="nav-space">
+                        Create an account here. Please put complete & accurate information as the system will send a
+                        link to your email address (or a code to your phone). If you cannot receive “Verify email”
+                        directly in Inbox, you should check your “Spam” folder as well.
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 pop flex-fill" data-aos="zoom-in">
+                <div
+                    class=" border shadow-sm rounded d-flex flex-column justify-content-center align-items-center gap-4 p-4 h-100">
+                    <img src="./Images/interface-control-svgrepo-com.svg" height="50px" width="50px" alt="" srcset="">
+                    <span class="nav-space">
+                        Create an account here. Please put complete & accurate information as the system will send a
+                        link to your email address (or a code to your phone). If you cannot receive “Verify email”
+                        directly in Inbox, you should check your “Spam” folder as well.
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 pop flex-fill" data-aos="zoom-in">
+                <div
+                    class=" border shadow-sm rounded d-flex flex-column justify-content-center align-items-center gap-4 p-4 h-100">
+                    <img src="./Images/machine-vision-svgrepo-com.svg" height="50px" width="50px" alt="" srcset="">
+                    <span class="nav-space">
+                        Create an account here. Please put complete & accurate information as the system will send a
+                        link to your email address (or a code to your phone). If you cannot receive “Verify email”
+                        directly in Inbox, you should check your “Spam” folder as well.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid secondary text-center">
+        <div class="container d-flex flex-column justify-content-center align-items-center p-4" data-aos="flip-down">
+            <div>
+                <span class="h1">
+                    Our Best <span class="nav-span-color">Pricing</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5" id="pricing">
+        <div class="row text-center g-lg-5 d-flex gap-3">
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 flex-fill" data-aos="flip-left" data-aos-duration="2000">
+                <div
+                    class=" shadow-sm pricing rounded d-flex flex-column justify-content-center align-items-center gap-4 p-4 h-100">
+                    <div>
+                        <span>Basic Plan</span>
+                    </div>
+                    <div>
+                        <span class="h1">₹ 0</span>
+                    </div>
+                    <div>
+                        <span>100% free. Forever</span>
+                    </div>
+                    <div>
+                        <span>ENJOY ALL THE FEATURES</span>
+                    </div>
+                    <div>
+                        <span>150 GB Bandwidth</span>
+                    </div>
+                    <div>
+                        <span>100 GB Storage</span>
+                    </div>
+                    <div>
+                        <span>$1.00 / GB Overages</span>
+                    </div>
+                    <div>
+                        <span>Advance Plan</span>
+                    </div>
+                    <div>
+                        <button type="button" class="pricing-btn">Choose Plan</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 flex-fill" data-aos="flip-left" data-aos-duration="2000">
+                <div
+                    class=" shadow-sm pricing rounded d-flex flex-column justify-content-center align-items-center gap-4 p-4 h-100">
+                    <div>
+                        <span>Basic Plan</span>
+                    </div>
+                    <div>
+                        <span class="h1">₹ 500</span>
+                    </div>
+                    <div>
+                        <span>100% free. Forever</span>
+                    </div>
+                    <div>
+                        <span>ENJOY ALL THE FEATURES</span>
+                    </div>
+                    <div>
+                        <span>150 GB Bandwidth</span>
+                    </div>
+                    <div>
+                        <span>100 GB Storage</span>
+                    </div>
+                    <div>
+                        <span>$1.00 / GB Overages</span>
+                    </div>
+                    <div>
+                        <span>Advance Plan</span>
+                    </div>
+                    <div>
+                        <button type="button" class="pricing-btn">Choose Plan</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 flex-fill" data-aos="flip-left" data-aos-duration="2000">
+                <div
+                    class=" shadow-sm pricing rounded d-flex flex-column justify-content-center align-items-center gap-4 p-4 h-100">
+                    <div>
+                        <span>Basic Plan</span>
+                    </div>
+                    <div>
+                        <span class="h1">₹ 1,000</span>
+                    </div>
+                    <div>
+                        <span>100% free. Forever</span>
+                    </div>
+                    <div>
+                        <span>ENJOY ALL THE FEATURES</span>
+                    </div>
+                    <div>
+                        <span>150 GB Bandwidth</span>
+                    </div>
+                    <div>
+                        <span>100 GB Storage</span>
+                    </div>
+                    <div>
+                        <span>$1.00 / GB Overages</span>
+                    </div>
+                    <div>
+                        <span>Advance Plan</span>
+                    </div>
+                    <div>
+                        <button type="button" class="pricing-btn">Choose Plan</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 flex-fill" data-aos="flip-left" data-aos-duration="2000">
+                <div
+                    class=" shadow-sm pricing rounded d-flex flex-column justify-content-center align-items-center gap-4 p-4 h-100">
+                    <div>
+                        <span>Basic Plan</span>
+                    </div>
+                    <div>
+                        <span class="h1">₹ 1,500</span>
+                    </div>
+                    <div>
+                        <span>100% free. Forever</span>
+                    </div>
+                    <div>
+                        <span>ENJOY ALL THE FEATURES</span>
+                    </div>
+                    <div>
+                        <span>150 GB Bandwidth</span>
+                    </div>
+                    <div>
+                        <span>100 GB Storage</span>
+                    </div>
+                    <div>
+                        <span>$1.00 / GB Overages</span>
+                    </div>
+                    <div>
+                        <span>Advance Plan</span>
+                    </div>
+                    <div>
+                        <button type="button" class="pricing-btn">Choose Plan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid secondary text-center">
+        <div class="container d-flex flex-column justify-content-center align-items-center p-4" data-aos="flip-down">
+            <div>
+                <span class="h1">
+                    iRender <span class="nav-span-color">Quick Start</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row text-center g-lg-5 d-flex gap-3">
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 pop flex-fill" data-aos="flip-left"
+                data-aos-easing="ease-out-cubic" data-aos-duration="2000">
+                <div
+                    class="q-start border shadow-sm rounded d-flex flex-column justify-content-start align-items-center gap-4 p-4 h-100">
+                    <img src="./Images/address-book-svgrepo-com.svg" height="50px" width="50px" alt="" srcset="">
+                    <div>
+                        <span class="h5 fw-bold">1. Register</span>
+                    </div>
+                    <span class="nav-space">
+                        Create an account here. Please put complete & accurate information as the system will send a
+                        link to your email address (or a code to your phone). If you cannot receive “Verify email”
+                        directly in Inbox, you should check your “Spam” folder as well.
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 pop flex-fill" data-aos="flip-left"
+                data-aos-easing="ease-out-cubic" data-aos-duration="2000">
+                <div
+                    class="q-start border shadow-sm rounded d-flex flex-column justify-content-center align-items-center gap-4 p-4 h-100">
+                    <img src="./Images/database-svgrepo-com.svg" height="50px" width="50px" alt="" srcset="">
+                    <div>
+                        <span class="h5 fw-bold">2. Create new system image</span>
+                    </div>
+                    <span class="nav-space">
+                        Create an account here. Please put complete & accurate information as the system will send a
+                        link to your email address (or a code to your phone). If you cannot receive “Verify email”
+                        directly in Inbox, you should check your “Spam” folder as well.
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 pop flex-fill" data-aos="flip-left"
+                data-aos-easing="ease-out-cubic" data-aos-duration="2000">
+                <div
+                    class="q-start border shadow-sm rounded d-flex flex-column justify-content-center align-items-center gap-4 p-4 h-100">
+                    <img src="./Images/laptop-setting-svgrepo-com.svg" height="50px" width="50px" alt="" srcset="">
+                    <div>
+                        <span class="h5 fw-bold">3. Connect & Setup</span>
+                    </div>
+                    <span class="nav-space">
+                        Create an account here. Please put complete & accurate information as the system will send a
+                        link to your email address (or a code to your phone). If you cannot receive “Verify email”
+                        directly in Inbox, you should check your “Spam” folder as well.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row text-center g-lg-5 d-flex gap-3">
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 pop flex-fill" data-aos="flip-right"
+                data-aos-easing="ease-out-cubic" data-aos-duration="2000">
+                <div
+                    class="q-start border shadow-sm rounded d-flex flex-column justify-content-center align-items-center gap-4 p-4 h-100">
+                    <img src="./Images/data-2-svgrepo-com.svg" height="50px" width="50px" alt="" srcset="">
+                    <div>
+                        <span class="h5 fw-bold">4. Transfer data</span>
+                    </div>
+                    <span class="nav-space">
+                        Create an account here. Please put complete & accurate information as the system will send a
+                        link to your email address (or a code to your phone). If you cannot receive “Verify email”
+                        directly in Inbox, you should check your “Spam” folder as well.
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 pop flex-fill" data-aos="flip-right"
+                data-aos-easing="ease-out-cubic" data-aos-duration="2000">
+                <div
+                    class="q-start border shadow-sm rounded d-flex flex-column justify-content-center align-items-center gap-4 p-4 h-100">
+                    <img src="./Images/cloud-gpu-svgrepo-com.svg" height="50px" width="50px" alt="" srcset="">
+                    <div>
+                        <span class="h5 fw-bold">5. Use GPU power</span>
+                    </div>
+                    <span class="nav-space">
+                        Create an account here. Please put complete & accurate information as the system will send a
+                        link to your email address (or a code to your phone). If you cannot receive “Verify email”
+                        directly in Inbox, you should check your “Spam” folder as well.
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-2 pop flex-fill" data-aos="flip-right"
+                data-aos-easing="ease-out-cubic" data-aos-duration="2000">
+                <div
+                    class="q-start border shadow-sm rounded d-flex flex-column justify-content-center align-items-center gap-4 p-4 h-100">
+                    <img src="./Images/payment-svgrepo-com.svg" height="50px" width="50px" alt="" srcset="">
+                    <div>
+                        <span class="h5 fw-bold">6. Flexible payment, pay as you go</span>
+                    </div>
+                    <span class="nav-space">
+                        Create an account here. Please put complete & accurate information as the system will send a
+                        link to your email address (or a code to your phone). If you cannot receive “Verify email”
+                        directly in Inbox, you should check your “Spam” folder as well.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid secondary text-center">
+        <div class="container d-flex flex-column justify-content-center align-items-center p-4" data-aos="flip-down">
+            <div>
+                <span class="h1">
+                    Frequently Asks <span class="nav-span-color">Questions</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid my-5">
+        <div class="container">
+
+            <div class="accordion rounded" id="accordionExample" data-aos="zoom-in">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            What is a rendering farm
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            A rendering farm is a cluster of computers or servers that work together to render
+                            computer-generated imagery (CGI) or animations. Rendering is a process where a scene or
+                            model created in a 3D software application is converted into 2D images or animations.
+                            Rendering farms are crucial for handling complex and resource-intensive rendering tasks,
+                            particularly in industries like film, animation, architecture, and design.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            What factors should be considered when choosing a rendering farm service
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            Ensure that the rendering farm supports the specific 3D rendering software you are using
+                            (e.g., Blender, 3ds Max, Maya).
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            How does distributed rendering work in a rendering farm
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            Distributed rendering is a technique used in rendering farms to divide a large rendering
+                            task into smaller parts, distributing these parts across multiple computers or nodes for
+                            simultaneous processing. Each node in the rendering farm works on a specific portion of the
+                            overall rendering job
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid secondary text-center py-5">
+        <div class="container d-flex flex-column justify-content-center align-items-center p-4">
+            <div>
+                <div data-aos="fade-right">
+                    <span class="h1">
+                        We Focus On <span class="nav-span-color">People</span> And The Joy Of Creation.
+                    </span>
+                </div>
+                
+                <div class="py-2" data-aos="fade-left">
+                    <span>
+                        “iRENDER RENDER FARM – HAPPY RENDERING”
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="container justify-content-between my-5">
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="flip-up">
+                    <div>
+                        <div class="card-body text-center">
+                            <img src="./Images/server-minimalistic-svgrepo-com.svg" height="30px" width="30px" alt=""
+                                srcset="">
+                            <div class="p-2">
+                                <span class="display-4 fw-bold nav-span-color">1.000++</span>
+                            </div>
+                            <span class="tag-text">DUAL XEON SERVERs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="flip-up">
+                    <div>
+                        <div class="card-body text-center">
+                            <img src="./Images/server-minimalistic-svgrepo-com.svg" height="30px" width="30px" alt=""
+                                srcset="">
+                            <div class="p-2">
+                                <span class="display-4 fw-bold nav-span-color">1.000++</span>
+                            </div>
+                            <span class="tag-text">GPU NVIDIA RTX 3090/4090 CARDs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="flip-down">
+                    <div>
+                        <div class="card-body text-center">
+                            <img src="./Images/topdown-shooter-game-space-craft-svgrepo-com.svg" height="30px"
+                                width="30px" alt="" srcset="">
+                            <div class="p-2">
+                                <span class="display-4 fw-bold nav-span-color">99.99%</span>
+                            </div>
+                            <span class="tag-text">SERVICE AVAILABILITY</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3 mb-4" data-aos="flip-down">
+                    <div>
+                        <div class="card-body text-center">
+                            <img src="./Images/handshake-deal-svgrepo-com.svg" height="30px" width="30px" alt=""
+                                srcset="">
+                            <div class="p-2">
+                                <span class="display-4 fw-bold nav-span-color">24/7</span>
+                            </div>
+                            <span class="tag-text">ELITE SUPPORT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid text-center my-5">
+        <div class="container d-flex gap-2 flex-column justify-content-center align-items-center p-4">
+            <div data-aos="fade-up">
+                <span class="h2 fw-bold">
+                    "WE ALL KNOW THAT TALENT IS <span class="nav-span-color">NEVER ENOUGH</span> BUT DEVOTION IS THE
+                    ONLY WAY TO <span class="nav-span-color">SUCCESS</span>"
+                </span>
+            </div>
+
+            <div class="py-3" data-aos="fade-up">
+                <span class="h6 fw-bold">
+                    IRENDER RENDER FARM – "HAPPY RENDERING"
+                </span>
+            </div>
+
+            <div data-aos="fade-up">
+                <button type="button" class="pricing-btn">Get Started</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid secondary">
+        <div class="container justify-content-between">
+            <div class="row">
+                <div class="col-md-6 col-lg-3 my-4 text-center" data-aos="flip-left">
+                    <div class="py-2">
+                        <p class="fw-bold h5">Cloud Template</p>
+                    </div>
+                    <div>
+                        <span>
+                            Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
+                            there live the blind texts.
+                        </span>
+                    </div>
+                    <div class="mt-3 d-flex justify-content-center gap-3">
+                        <div>
+                            <a href="https://twitter.com" target="_blank">
+                                <img src="./Images/twitter-2-svgrepo-com.svg" height="40px" width="40px" alt=""
+                                    srcset="">
+                            </a>
+                        </div>
+                        <div>
+                            <a href="https://facebook.com" target="_blank">
+                                <img src="./Images/facebook-svgrepo-com.svg" height="40px" width="40px" alt=""
+                                    srcset="">
+                            </a>
+                        </div>
+                        <div>
+                            <a href="https://instagram.com" target="_blank">
+                                <img src="./Images/instagram-round-svgrepo-com.svg" height="40px" width="40px" alt=""
+                                    srcset="">
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 col-lg-3 my-4 text-center" data-aos="flip-right">
+                    <div class="py-2">
+                        <p class="fw-bold h5">Useful Links</p>
+                    </div>
+                    <div class="p-2">
+                        <a href="#" class="text-white text-decoration-none">Company</a>
+                    </div>
+                    <div class="p-2">
+                        <a href="#" class="text-white mb-2 text-decoration-none">Pricing</a>
+                    </div>
+                    <div class="p-2">
+                        <a href="#" class="text-white text-decoration-none">Leadership</a>
+                    </div>
+                    <div class="p-2">
+                        <a href="#" class="text-white text-decoration-none">Blog</a>
+                    </div>
+                    <div class="p-2">
+                        <a href="#" class="text-white text-decoration-none">Contact</a>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3 my-4 text-center" data-aos="flip-left">
+                    <div class="py-2">
+                        <p class="fw-bold h5">Navigational</p>
+                    </div>
+                    <div class="p-2">
+                        <a href="#" class="text-white text-decoration-none">Join Us</a>
+                    </div>
+                    <div class="p-2">
+                        <a href="#" class="text-white text-decoration-none">Blog</a>
+                    </div>
+                    <div class="p-2">
+                        <a href="#" class="text-white text-decoration-none">Privacy & Policy</a>
+                    </div>
+                    <div class="p-2">
+                        <a href="#" class="text-white text-decoration-none">Terms & Condition</a>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3 my-4" data-aos="flip-right">
+                    <div class="py-2">
+                        <p class="fw-bold h5 text-center">Office</p>
+                    </div>
+
+                    <div class="p-2 d-flex align-items-center gap-4">
+                        <div>
+                            <img src="./Images/location-svgrepo-com.svg" height="20px" width="20px" srcset=""
+                                alt="Location">
+                        </div>
+                        <div>
+                            <span>
+                                203 Fake St. Mountain View, San Francisco, California, USA
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-2 d-flex align-items-center gap-4">
+                        <div>
+                            <img src="./Images/phone-svgrepo-com.svg" height="20px" width="20px" srcset="" alt="Phone">
+                        </div>
+                        <div>
+                            <span>
+                                +91 9434323454
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-2 d-flex align-items-center gap-4">
+                        <div>
+                            <img src="./Images/email-1572-svgrepo-com.svg" height="20px" width="20px" srcset=""
+                                alt="Email">
+                        </div>
+                        <div>
+                            <span>
+                                info@yourdomain.com
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container text-center p-4">
+            <span>Copyright ©2023 All rights reserved | This template is made with by Colorlib</span>
+        </div>
+    </div>
+
+    <script src="./js/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+
+</html>
