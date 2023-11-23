@@ -1,7 +1,6 @@
 function closePopup(popupId) {
     var popup = document.getElementById("successPopup");
     popup.style.display = 'none';
-    window.location.href = "login.html";
 }
 function showPopup(popupId) {
     var popup = document.getElementById("successPopup");
@@ -99,7 +98,6 @@ function validateAndSubmit(event) {
                 showPopup()
                 setTimeout(() => {
                     closePopup()
-                    window.location.href = "login.html";
                 }, 5000)
             } else {
                 failedMsg.innerHTML = data.error
@@ -109,8 +107,7 @@ function validateAndSubmit(event) {
                 showFailedPopup()
             }
         } catch (error) {
-            console.log("error");
-            alert("failed", error)
+            failedMsg.innerHTML = data.error
         }
     }
 

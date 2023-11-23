@@ -27,6 +27,7 @@
     border-radius: 8px;
     max-width: 300px;
     width: 100%;
+    z-index: 30;
 }
 
 .popup-content {
