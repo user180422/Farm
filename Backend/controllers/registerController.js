@@ -145,26 +145,9 @@ exports.verifyEmail = async (req, res) => {
 
 }
 
-// login api
-
+// login user
 exports.loginUser = async (req, res) => {
-    const { email, password } = req.body;
 
-    const client = await connectToCluster();
-    const database = client.db("Farm");
-    const usersCollection = database.collection('Users');
-
-    const user = await usersCollection.findOne({ email: email });
-
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-        return res.status(401).json({ error: 'Invalid email or password' });
-    }
-
-    res.json({ token });
-}
-
-exports.loginUser = async (req, res) => {
-    
     const { email, password } = req.body;
     try {
         const client = await connectToCluster();
@@ -176,7 +159,12 @@ exports.loginUser = async (req, res) => {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
+        if (!user.isEmailVerified) {
+            return res.status(403).json({ error: 'Email not verified. Please activate your email.' });
+        }
+
         const token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_TOKEN, { expiresIn: '1h' });
+        res.cookie('token', token, { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true, sameSite: 'strict' });
         res.status(200).json({ success: 'Login successful', userId: user._id, email: user.email, token: token });
 
     } catch (error) {
@@ -184,4 +172,132 @@ exports.loginUser = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 
+};
+
+// forget-password request
+exports.fargetPassword = async (req, res) => {
+    const { email } = req.body;
+
+    const client = await connectToCluster();
+    const database = client.db("Farm");
+    const usersCollection = database.collection('Users');
+
+    const user = await usersCollection.findOne({ email });
+
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+    const token = jwt.sign({ email }, process.env.JWT_TOKEN, { expiresIn: '1h' });
+
+    // sending email
+    async function sendWelcomeEmail(userEmail, user) {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD,
+            },
+        });
+
+        const resetURL = `http://localhost:4000/newPassword.html?token=${token}`;
+        const mailOptions = {
+            from: process.env.EMAIL,
+            to: userEmail,
+            subject: 'Password Reset Request',
+            text: `Click the following link to reset your password: ${resetURL}`,
+        };
+
+        try {
+            const info = await transporter.sendMail(mailOptions);
+            return true;
+        } catch (error) {
+            console.error('Error sending welcome email:', error.message);
+            return false;
+        }
+    }
+
+    const emailSent = await sendWelcomeEmail(email, user);
+
+    if (emailSent) {
+        res.status(200).json({ "success": 'Password reset email sent successfully' });
+    } else {
+        res.status(500).json({ "error": 'Error sending password reset email' });
+    }
+
+};
+
+exports.checktoken = async (req, res) => {
+    const { token } = req.query;
+
+    try {
+        // Verify the token
+        jwt.verify(token, process.env.JWT_TOKEN, async (err, decoded) => {
+            if (err) {
+                return res.status(401).json({ error: 'Invalid or expired token' });
+            }
+
+            const { email } = decoded;
+
+            const client = await connectToCluster();
+            const database = client.db("Farm");
+            const usersCollection = database.collection('Users');
+
+            const user = await usersCollection.findOne({ email });
+
+            if (!user) {
+                return res.status(401).json({ error: 'Invalid or expired token' });
+            }
+
+            // Token is valid
+            res.status(200).json({ success: 'Token is valid' });
+        });
+    } catch (error) {
+        console.error('Error checking token validity:', error);
+        res.status(500).json({ error: 'Internal server error', status: 500 });
+    }
+};
+
+exports.newPassword = async (req, res) => {
+    const { token, password, confirmPassword } = req.body;
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+        return res.status(400).json({ error: 'Passwords do not match' });
+    }
+
+    try {
+        // Verify the token
+        jwt.verify(token, process.env.JWT_TOKEN, async (err, decoded) => {
+            if (err) {
+                return res.status(401).json({ error: 'Invalid or expired token' });
+            }
+
+            const { email } = decoded;
+
+            const client = await connectToCluster();
+            const database = client.db("Farm");
+            const usersCollection = database.collection('Users');
+            const user = await usersCollection.findOne({ email });
+
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            const result = await usersCollection.updateOne(
+                { email: email },
+                { $set: { password: hashedPassword } }
+            );
+    
+            if (result.modifiedCount === 1) {
+                res.status(200).json({ success: 'Password reset successful' });
+            } else {
+                res.status(404).json({ error: 'User not found or password not updated' });
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
 };

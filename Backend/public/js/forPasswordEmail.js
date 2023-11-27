@@ -9,14 +9,13 @@ function showFailedPopup(popupId) {
 
 function validateAndSubmit(event) {
 
+    const msgContainer = document.querySelector(".msg")
     const failedMsg = document.querySelector(".failedMsg")
 
     event.preventDefault();
     var email = document.getElementById('email').value;
-    var password = document.getElementById('password').value;
 
     document.getElementById('emailError').innerText = '';
-    document.getElementById('passwordError').innerText = '';
 
     if (!email) {
         document.getElementById('emailError').innerText = 'Email is required';
@@ -29,23 +28,14 @@ function validateAndSubmit(event) {
         }
     }
 
-    if (!password) {
-        document.getElementById('passwordError').innerText = 'Password is required';
-        return
-    } else if (!/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/.test(password)) {
-        document.getElementById('passwordError').innerText = 'Password must contain at least 8 characters with at least one uppercase letter, one number, and one special character';
-        return
-    }
-
-    if (!email || !password || !/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/.test(password)) {
+    if (!email) {
         return false;
     } else {
         const data = {
-            email: email,
-            password: password
+            email: email
         };
 
-        fetch('http://localhost:4000/api/login', {
+        fetch('http://localhost:4000/api/forgot-password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -54,8 +44,14 @@ function validateAndSubmit(event) {
         })
             .then(response => response.json())
             .then(data => {
+
                 if (data.success) {
-                    window.location.href = "index.html#pricing"
+                    failedMsg.innerHTML = data.success
+                    document.getElementById('email').value = ""
+                    setTimeout(() => {
+                        failedClosePopup()
+                    }, 5000)
+                    showFailedPopup()
                 } else {
                     failedMsg.innerHTML = data.error
                     setTimeout(() => {
@@ -65,8 +61,7 @@ function validateAndSubmit(event) {
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
-                failedMsg.innerHTML('An error occurred. Please try again later.');
+                failedMsg.innerHTML = "Somthing went wrong"
             });
     }
 

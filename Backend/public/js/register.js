@@ -76,7 +76,6 @@ function validateAndSubmit(event) {
     // send data 
     async function createUser(sendData) {
 
-        console.log("sendData", sendData);
         try {
             const response = await fetch('http://localhost:4000/api/createUser', {
                 method: 'POST',
@@ -87,7 +86,6 @@ function validateAndSubmit(event) {
             });
 
             const data = await response.json();
-            console.log(data);
             if (data.success) {
                 document.getElementById('username').value = "";
                 document.getElementById('email').value = "";
