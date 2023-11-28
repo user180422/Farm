@@ -7,6 +7,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 require('dotenv').config();
 const { connectToCluster } = require("./database/connect");
+const loginCheck = require('./middleware/loginCheck')
 const path = require("path")
 
 // Imports
@@ -24,6 +25,10 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/public', 'index.html'));
+});
+
+app.get('/dashboard.html', loginCheck.dashboardCheck, (req, res) => {
+    res.sendFile(path.join(__dirname, '/public', 'dashboard.html'));
 });
 
 // Routes

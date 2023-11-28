@@ -31,6 +31,7 @@ if (token) {
                 loginElements.style.display = 'block';
                 logoutElements.style.display = 'none';
                 dashboard.style.display = 'none'
+                window.location.href = 'login.html'
             }
         })
         .catch(error => console.error('Error:', error));
@@ -38,6 +39,7 @@ if (token) {
     loginElements.style.display = 'block';
     logoutElements.style.display = 'none';
     dashboard.style.display = 'none'
+    window.location.href = 'login.html'
 }
 
 function logout() {
