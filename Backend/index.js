@@ -11,6 +11,7 @@ const path = require("path")
 
 // Imports
 const userRoutes = require('./routes/userRoutes')
+const pageRoutes = require('./routes/pagesRouter')
 
 // App Middlewares
 
@@ -20,6 +21,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '/public')));
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/public', 'index.html'));
 });
@@ -27,6 +29,7 @@ app.get('/', (req, res) => {
 // Routes
 
 app.use('/api', userRoutes)
+app.use('/api', pageRoutes)
 
 // Server and databse
 

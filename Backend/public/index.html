@@ -17,6 +17,23 @@
 <body>
 
     <!-- nav -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container-fluid nav-bg sticky">
         <div class="container py-2 nav-bg">
@@ -57,8 +74,12 @@
                                         href="/getQuote.html">Get a Quote</a>
                                 </li>
                                 <li class="nav-item px-2">
-                                    <a class="nav-link rounded nav-space nav-link-hover text-white" id="Register" aria-current="page"
-                                        href="/login.html">Login</a>
+                                    <a class="nav-link rounded nav-space nav-link-hover login text-white" id="Register"
+                                        aria-current="page" href="/login.html">Login</a>
+                                </li>
+                                <li class="nav-item px-2">
+                                    <a class="nav-link rounded nav-space nav-link-hover logout text-white" id="Register"
+                                        aria-current="page" href="#" onclick="logout()">Logout</a>
                                 </li>
                             </ul>
                         </form>
@@ -516,7 +537,7 @@
                         We Focus On <span class="nav-span-color">People</span> And The Joy Of Creation.
                     </span>
                 </div>
-                
+
                 <div class="py-2" data-aos="fade-left">
                     <span>
                         “iRENDER RENDER FARM – HAPPY RENDERING”
