@@ -41,8 +41,6 @@ if (token) {
 }
 
 function logout() {
-
     document.cookie = "farm= ";
-    console.log("logout ");
-
+    window.location.href = 'index.html'
 }
