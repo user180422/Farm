@@ -18,6 +18,17 @@
 
 <body>
 
+    <div class="popup" id="failedPopup">
+        <div class="popup-content d-flex align-items-center">
+            <div>
+                <p class="failedMsg"></p>
+            </div>
+            <div>
+                <span class="close" onclick="failedClosePopup('failedPopup')">&times;</span>
+            </div>
+        </div>
+    </div>
+    
     <!-- nav -->
 
     <div class="container-fluid nav-bg sticky">
@@ -97,7 +108,7 @@
 
     <div class="container-fluid form-container" data-aos="fade-up">
         <div class="container text-center p-5">
-            <form class="border rounded shadow-lg p-5" id="quoteForm" onsubmit="submitHandler()">
+            <form class="border rounded shadow-lg p-5" id="quoteForm" onsubmit="submitHandler(event)">
                 <div class="mb-3">
                     <label for="name" class="form-label fw-bold">Name</label>
                     <input type="text" class="form-control py-2" id="name" placeholder="Your Name">
@@ -115,7 +126,8 @@
                         <div class="col-md-6">
                             <label for="countryCode" class="form-label fw-bold">Country Code</label>
                             <select class="form-select py-2" id="countryCode" name="countryCode">
-                                <option data-countryCode="GB" value="44" Selected>Norway (+47)</option>
+                                <option data-countryCode="GB" value="" Selected>Select ...</option>
+                                <option data-countryCode="GB" value="44">Norway (+47)</option>
                                 <option data-countryCode="US" value="1">UK (+44)</option>
                                 <optgroup label="Other countries">
                                     <option data-countryCode="DZ" value="213">Algeria (+213)</option>

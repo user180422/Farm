@@ -13,6 +13,7 @@ const path = require("path")
 // Imports
 const userRoutes = require('./routes/userRoutes')
 const pageRoutes = require('./routes/pagesRouter')
+const quoteRoutes = require('./routes/quoteRouter')
 
 // App Middlewares
 
@@ -35,6 +36,7 @@ app.get('/dashboard.html', loginCheck.dashboardCheck, (req, res) => {
 
 app.use('/api', userRoutes)
 app.use('/api', pageRoutes)
+app.use('/api', quoteRoutes)
 
 // Server and databse
 

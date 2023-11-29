@@ -45,82 +45,103 @@ function logout() {
     window.location.href = 'index.html'
 }
 
-function submitHandler() {
-    // Add your form ID or class if it's specific to one form
-    var form = document.querySelector('quoteForm');
+function failedClosePopup(popupId) {
+    var popup = document.getElementById("failedPopup");
+    popup.style.display = 'none';
+}
+function showFailedPopup(popupId) {
+    var popup = document.getElementById("failedPopup");
+    popup.style.display = 'block';
+}
 
-    console.log("working");
+const failedMsg = document.querySelector(".failedMsg");
 
-    form.addEventListener('submit', function (event) {
-        // Prevent the form from submitting by default
-        event.preventDefault();
+function submitHandler(event) {
+    console.log("failedmsg", failedMsg);
 
-        // Reset previous error messages
-        resetErrors();
+    event.preventDefault();
 
-        // Validate each field
-        var name = document.getElementById('name').value;
-        var email = document.getElementById('email').value;
-        var countryCode = document.getElementById('countryCode').value;
-        var phone = document.getElementById('phone').value;
+    var name = document.getElementById('name').value;
+    var email = document.getElementById('email').value;
+    var countryCode = document.getElementById('countryCode').value;
+    var phone = document.getElementById('phone').value;
+    var quote = document.getElementById('quote').value;
 
-        validateName(name);
-        validateEmail(email);
-        validateCountryCode(countryCode);
-        validatePhone(phone);
+    document.getElementById('nameError').innerText = '';
+    document.getElementById('emailError').innerText = '';
+    document.getElementById('countryCodeError').innerText = '';
+    document.getElementById('phoneNoError').innerText = '';
+    document.getElementById('quotesError').innerText = '';
 
-        // If all validations pass, you can submit the form
-        if (validateName(name) && validateEmail(email) && validateCountryCode(countryCode) && validatePhone(phone)) {
-            // Your form submission logic goes here
-            console.log('Form submitted successfully!');
+    if (!name) {
+        document.getElementById('nameError').innerText = 'Name is required';
+        return;
+    }
+
+    if (!email) {
+        document.getElementById('emailError').innerText = 'Email is required';
+        return;
+    } else {
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            document.getElementById('emailError').innerText = 'Invalid email format';
+            return;
         }
-    });
-};
-
-function validateName(name) {
-    var nameRegex = /^[a-zA-Z\s]+$/;
-    var nameError = document.getElementById('nameError');
-
-    if (!nameRegex.test(name)) {
-        nameError.textContent = 'Invalid name. Only alphabets and spaces are allowed.';
-        return false;
     }
-    return true;
-}
 
-function validateEmail(email) {
-    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    var emailError = document.getElementById('emailError');
-
-    if (!emailRegex.test(email)) {
-        emailError.textContent = 'Invalid email address.';
-        return false;
+    if (!countryCode) {
+        document.getElementById('countryCodeError').innerText = 'Country Code is required';
+        return;
     }
-    return true;
-}
 
-function validateCountryCode(countryCode) {
-    var countryCodeError = document.getElementById('countryCodeError');
-
-    // You can add your specific validation logic for the country code if needed
-
-    return true;
-}
-
-function validatePhone(phone) {
-    var phoneRegex = /^\d{10}$/; // Change this regex based on your phone number format
-    var phoneError = document.getElementById('phoneNoError');
-
-    if (!phoneRegex.test(phone)) {
-        phoneError.textContent = 'Invalid phone number. It should be 10 digits.';
-        return false;
+    if (!phone) {
+        document.getElementById('phoneNoError').innerText = 'Phone Number is required';
+        return;
     }
-    return true;
-}
 
-function resetErrors() {
-    var errorContainers = document.querySelectorAll('.error-message');
-    errorContainers.forEach(function (container) {
-        container.textContent = '';
-    });
+    if (!quote) {
+        document.getElementById('quotesError').innerText = 'Quote is required';
+        return;
+    }
+
+    const data = {
+        name: name,
+        email: email,
+        countryCode: countryCode,
+        phone: phone,
+        quote: quote
+    };
+
+    fetch('http://localhost:4000/api/createQuote', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('name').value = ""
+                document.getElementById('email').value = ""
+                document.getElementById('countryCode').value = ""
+                document.getElementById('phone').value = ""
+                document.getElementById('quote').value = ""
+                failedMsg.innerHTML = data.success;
+                setTimeout(() => {
+                    failedClosePopup();
+                }, 5000);
+                showFailedPopup();
+            } else {
+                failedMsg.innerHTML = data.error;
+                setTimeout(() => {
+                    failedClosePopup();
+                }, 5000);
+                showFailedPopup();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            failedMsg.innerHTML('An error occurred. Please try again later.');
+        });
 }
