@@ -54,8 +54,8 @@
                                         href="/index.html">Home</a>
                                 </li>
                                 <li class="nav-item px-2">
-                                    <a class="nav-link rounded nav-space nav-link-hover text-white" id="dashboard" aria-current="page"
-                                        href="/dashboard.html">dashboard</a>
+                                    <a class="nav-link rounded nav-space nav-link-hover text-white" id="dashboard"
+                                        aria-current="page" href="/dashboard.html">dashboard</a>
                                 </li>
                                 <li class="nav-item px-2">
                                     <a class="nav-link rounded nav-space nav-link-hover text-white" aria-current="page"
@@ -94,11 +94,107 @@
 
     </div>
 
-    <div class="container">
-        Hello world
+    <div class="container-fluid secondary pt-3 pb-3">
+        <div class="container">
+            <div class="row d-flex justify-content-between">
+                <div class="col-md-5 dash-inner mb-2 p-3">
+                    <p>Column 1 (size 6)</p>
+                </div>
+                <div class="col-md-3 mb-2 ">
+                    <div class="container mb-2 p-3 dash-inner nested-container">
+                        <p>Nested Container 1</p>
+                    </div>
+
+                    <div class="container p-3 dash-inner nested-container">
+                        <p>Nested Container 2</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <div class="container mb-2 p-3 dash-inner nested-container">
+                        <p>Nested Container 1</p>
+                    </div>
+
+                    <div class="container p-3 dash-inner nested-container">
+                        <p>Nested Container 2</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid secondary pb-3">
+        <div class="container">
+            <div class="row d-flex justify-content-between align-items-center">
+                <div class="col-md-6">
+                    <h5>Title</h5>
+                </div>
+                <div class="col-md-3 text-md-end">
+                </div>
+                <div class="col-md-3 px-3">
+                    <div class="input-group">
+                        <form>
+                            <input type="search" placeholder="Search...">
+                            <button class="search" type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="container-fluid secondary">
+        <div class="container">
+            <div class="table-responsive">
+                <table class="table rounded">
+                    <thead>
+                        <tr>
+                            <th style="background-color: #1D1D1D; color: white;">job</th>
+                            <th style="background-color: #1D1D1D; color: white;">Engine</th>
+                            <th style="background-color: #1D1D1D; color: white;">submited at</th>
+                            <th style="background-color: #1D1D1D; color: white;">started at</th>
+                            <th style="background-color: #1D1D1D; color: white;">completed at</th>
+                            <th style="background-color: #1D1D1D; color: white;">Rendered By</th>
+                            <th style="background-color: #1D1D1D; color: white;">process</th>
+                            <th style="background-color: #1D1D1D; color: white;">status</th>
+                            <th style="background-color: #1D1D1D; color: white;">cost</th>
+                            <th style="background-color: #1D1D1D; color: white;">Action</th>
+                            <th style="background-color: #1D1D1D; color: white;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                        </tr>
+                        <tr>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                            <td style="background-color: #1D1D1D; color: white;">john@example.com</td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- <div class="container-fluid secondary">
         <div class="container justify-content-between">
             <div class="row">
                 <div class="col-md-6 col-lg-3 my-4 text-center" data-aos="flip-left">
@@ -214,7 +310,7 @@
 
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div class="footer">
         <div class="container text-center p-4">
