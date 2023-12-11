@@ -29,6 +29,7 @@ console.log(
     }
 
     const token = authHeader.split(' ')[1];
+    console.log("token", token);
 
     jwt.verify(token, process.env.JWT_TOKEN, (err, user) => {
         if (err) {
@@ -36,6 +37,7 @@ console.log(
         }
 
         req.user = user;
+        console.log("middleware User");
         next();
     });
 };

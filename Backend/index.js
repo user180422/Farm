@@ -9,11 +9,14 @@ require('dotenv').config();
 const { connectToCluster } = require("./database/connect");
 const loginCheck = require('./middleware/loginCheck')
 const path = require("path")
+const stripe = require('stripe')(process.env.STRIPE_SK);
 
 // Imports
 const userRoutes = require('./routes/userRoutes')
 const pageRoutes = require('./routes/pagesRouter')
 const quoteRoutes = require('./routes/quoteRouter')
+const pricingRoute = require('./routes/pricingRouter')
+const renderRoute = require('./routes/renderRoute')
 
 // App Middlewares
 
@@ -37,6 +40,8 @@ app.get('/dashboard.html', loginCheck.dashboardCheck, (req, res) => {
 app.use('/api', userRoutes)
 app.use('/api', pageRoutes)
 app.use('/api', quoteRoutes)
+app.use('/api', pricingRoute)
+app.use('/api', renderRoute)
 
 // Server and databse
 

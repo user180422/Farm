@@ -9,6 +9,7 @@ const token = getCookie('farm');
 const loginElements = document.querySelector('.login');
 const logoutElements = document.querySelector('.logout');
 const dashboard = document.querySelector("#dashboard")
+const renderNow = document.querySelector("#rendernow")
 
 if (token) {
 
@@ -27,10 +28,12 @@ if (token) {
                 logoutElements.style.display = 'block';
                 loginElements.style.display = 'none';
                 dashboard.style.display = 'block'
+                renderNow.style.display = 'block'
             } else {
                 loginElements.style.display = 'block';
                 logoutElements.style.display = 'none';
                 dashboard.style.display = 'none'
+                renderNow.style.display = 'none'
             }
         })
         .catch(error => console.error('Error:', error));
@@ -38,6 +41,7 @@ if (token) {
     loginElements.style.display = 'block';
     logoutElements.style.display = 'none';
     dashboard.style.display = 'none'
+    renderNow.style.display = 'none'
 }
 
 function logout() {
@@ -75,9 +79,9 @@ function validateAndSubmit(event) {
         document.getElementById('usernameError').innerText = 'Username is required.';
         return;
     } else {
-        var usernameRegex = /^[a-zA-Z0-9_]+$/;
+        var usernameRegex = /^[a-zA-Z ]{3,20}$/;
         if (!usernameRegex.test(username)) {
-            document.getElementById('usernameError').innerText = 'Invalid username. Only letters, numbers, and underscores are allowed.';
+            document.getElementById('usernameError').innerText = 'Invalid username. Only letters 3 - 20';
             return;
         }
     }
