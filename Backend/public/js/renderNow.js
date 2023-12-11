@@ -47,32 +47,55 @@ function logout() {
     window.location.href = 'index.html'
 }
 
+function failedClosePopup(popupId) {
+    var popup = document.getElementById("failedPopup");
+    popup.style.display = 'none';
+}
+function showFailedPopup(popupId) {
+    var popup = document.getElementById("failedPopup");
+    popup.style.display = 'block';
+}
+
 function handleFormSubmission(event) {
     event.preventDefault();
 
+    const failedMsg = document.querySelector(".failedMsg");
     const folderInput = document.getElementById('folderInput');
     const selectedFiles = folderInput.files;
 
     const formData = new FormData();
-
-    // Append each file to the FormData object
     for (let i = 0; i < selectedFiles.length; i++) {
         console.log("in loop", selectedFiles[i].name);
         formData.append(`files`, selectedFiles[i]);
     }
 
-    console.log('Selected files:', formData);
-
     fetch('http://localhost:4000/api/uploads', {
         method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
         body: formData,
     })
         .then(response => response.json())
         .then(data => {
-            console.log('Upload successful:', data);
+            if (data.success) {
+                window.location.href = 'dashboard.html'
+            } else {
+                console.log("data", data);
+                failedMsg.innerHTML = data.error;
+                setTimeout(() => {
+                    failedClosePopup();
+                }, 5000);
+                showFailedPopup();
+            }
         })
         .catch(error => {
-            console.error('Error uploading files:', error);
+            console.log("error", error);
+            failedMsg.innerHTML = error;
+            setTimeout(() => {
+                failedClosePopup();
+            }, 5000);
+            showFailedPopup();
         });
 }
 
@@ -88,12 +111,10 @@ function validateFiles(files) {
         }
 
         const fileExtension = fileName.slice(lastDotIndex);
-
         if (!supportedExtensions.includes(fileExtension)) {
             return false;
         }
     }
-
     return true;
 }
 

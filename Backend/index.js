@@ -23,7 +23,7 @@ const renderRoute = require('./routes/renderRoute')
 const app = express();
 app.use(cors());
 app.use(morgan('dev'));
-app.use(express.json());
+app.use(express.json({ limit: '1gb', limit: '1gb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '/public')));
 
