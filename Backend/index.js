@@ -17,6 +17,7 @@ const pageRoutes = require('./routes/pagesRouter')
 const quoteRoutes = require('./routes/quoteRouter')
 const pricingRoute = require('./routes/pricingRouter')
 const renderRoute = require('./routes/renderRoute')
+const dashboardRoute = require('./routes/dashboardRouter')
 
 // App Middlewares
 
@@ -42,6 +43,7 @@ app.use('/api', pageRoutes)
 app.use('/api', quoteRoutes)
 app.use('/api', pricingRoute)
 app.use('/api', renderRoute)
+app.use('/api', dashboardRoute)
 
 // Server and databse
 

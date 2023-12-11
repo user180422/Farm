@@ -54,8 +54,9 @@ exports.uploadFile = async (req, res) => {
                 const database = client.db("Farm");
                 const quotesCollection = database.collection('userFilePath');
                 const insertData = await quotesCollection.insertOne({
-                    userId: req.user.email,
-                    path: folderName
+                    email: req.user.email,
+                    path: folderName,
+                    status: "Submitted"
                 });
 
                 if (!insertData.insertedId || insertData.insertedId === '') {
