@@ -68,6 +68,7 @@ const submittedElement = document.getElementById('submitted');
 const processElement = document.getElementById('process');
 const completedElement = document.getElementById('completed');
 const failedElement = document.getElementById('failed');
+const noData = document.getElementById('no-data');
 
 let totalCount = 0
 let submittedCount = 0;
@@ -134,10 +135,10 @@ async function fetchDashboardData() {
                     if (link) {
                         const buttonElement = document.createElement('button');
                         buttonElement.textContent = 'Download';
-                        buttonElement.style.backgroundColor = '#e80cc0'; 
-                        buttonElement.style.color = 'white'; 
+                        buttonElement.style.backgroundColor = '#e80cc0';
+                        buttonElement.style.color = 'white';
                         buttonElement.style.border = 'none';
-                        buttonElement.style.borderRadius = '8px'; 
+                        buttonElement.style.borderRadius = '8px';
 
                         const pathParts = link.split('\\');
                         const lastElement = pathParts[pathParts.length - 1];
@@ -191,14 +192,15 @@ async function fetchDashboardData() {
                     return cell;
                 }
 
-                totalElement.textContent = `Total: ${totalCount}`;
-                submittedElement.textContent = `Submitted: ${submittedCount}`;
-                processElement.textContent = `Process: ${processCount}`;
-                completedElement.textContent = `Completed: ${completedCount}`;
-                failedElement.textContent = `Failed: ${failedCount}`
+                totalElement.textContent = totalCount ? `Total: ${totalCount}` : 'Total: 0';
+                submittedElement.textContent = submittedCount ? `Submitted: ${submittedCount}` : 'Submitted: 0';
+                processElement.textContent = processCount ? `Process: ${processCount}` : 'Process: 0';
+                completedElement.textContent = completedCount ? `Completed: ${completedCount}` : 'Completed: 0';
+                failedElement.textContent = failedCount ? `Failed: ${failedCount}` : 'Failed: 0';
+
 
             } else {
-                console.log("no data");
+                noData.textContent = "No Data To Shown"
             }
         })
         .catch(error => {
