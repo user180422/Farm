@@ -134,6 +134,10 @@ async function fetchDashboardData() {
                     if (link) {
                         const buttonElement = document.createElement('button');
                         buttonElement.textContent = 'Download';
+                        buttonElement.style.backgroundColor = '#e80cc0'; 
+                        buttonElement.style.color = 'white'; 
+                        buttonElement.style.border = 'none';
+                        buttonElement.style.borderRadius = '8px'; 
 
                         const pathParts = link.split('\\');
                         const lastElement = pathParts[pathParts.length - 1];
