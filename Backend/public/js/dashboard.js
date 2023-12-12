@@ -51,6 +51,8 @@ function logout() {
     window.location.href = 'index.html'
 }
 
+
+
 function failedClosePopup(popupId) {
     var popup = document.getElementById("failedPopup");
     popup.style.display = 'none';
@@ -61,32 +63,148 @@ function showFailedPopup(popupId) {
 }
 
 const failedMsg = document.querySelector(".failedMsg");
+const totalElement = document.getElementById('total');
+const submittedElement = document.getElementById('submitted');
+const processElement = document.getElementById('process');
+const completedElement = document.getElementById('completed');
+const failedElement = document.getElementById('failed');
+
+let totalCount = 0
+let submittedCount = 0;
+let processCount = 0;
+let completedCount = 0;
+let failedCount = 0
 
 async function fetchDashboardData() {
-    try {
-        const response = await fetch('http://localhost:4000/api/dashboard', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
+    fetch('http://localhost:4000/api/dashboard', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                totalCount = data.data.length
+                data.data.forEach(item => {
+
+                    const newRow = document.createElement('tr');
+
+                    const pathParts = item.path.split('\\');
+                    const displayText = pathParts[pathParts.length - 1];
+
+                    const cell1 = createTableCell(displayText);
+                    const cell2 = createTableCell(item.created_at);
+                    const cell3 = createTableCell(item.status);
+                    const cell4 = createLinkCell(item.downloadPath);
+
+                    newRow.appendChild(cell1);
+                    newRow.appendChild(cell2);
+                    newRow.appendChild(cell3);
+                    newRow.appendChild(cell4);
+
+                    const tbody = document.getElementById('dataBody');
+                    tbody.appendChild(newRow);
+
+                    if (item.status === 'submitted') {
+                        submittedCount++;
+                    } else if (item.status === 'process') {
+                        processCount++;
+                    } else if (item.status === 'completed') {
+                        completedCount++;
+                    } else if (item.status === 'failed') {
+                        failedCount++
+                    }
+                });
+
+                function createTableCell(text) {
+                    const cell = document.createElement('td');
+                    cell.style.backgroundColor = '#1D1D1D';
+                    cell.style.color = 'white';
+                    cell.textContent = text;
+                    return cell;
+                }
+
+                function createLinkCell(link) {
+                    const cell = document.createElement('td');
+                    cell.style.backgroundColor = '#1D1D1D';
+                    cell.style.color = 'white';
+
+                    if (link) {
+                        const buttonElement = document.createElement('button');
+                        buttonElement.textContent = 'Download';
+
+                        const pathParts = link.split('\\');
+                        const lastElement = pathParts[pathParts.length - 1];
+
+                        buttonElement.onclick = function (clickedLink, fileName) {
+                            return function () {
+                                console.log('Button clicked:', clickedLink);
+                                console.log('File Name:', fileName);
+
+                                fetch(`http://localhost:4000/api/downloadFile/${fileName}`, {
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${token}`
+                                    },
+                                })
+                                    .then(response => {
+                                        // Check if the response is successful
+                                        if (!response.ok) {
+                                            throw new Error(`Failed to download file: ${response.status} ${response.statusText}`);
+                                        }
+
+                                        // Extract the filename from the Content-Disposition header
+                                        const contentDisposition = response.headers.get('Content-Disposition');
+                                        const filenameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/);
+
+                                        const suggestedFileName = filenameMatch ? filenameMatch[1] : fileName;
+
+                                        // Trigger the download
+                                        response.blob().then(blob => {
+                                            const url = window.URL.createObjectURL(blob);
+                                            const a = document.createElement('a');
+                                            a.href = url;
+                                            a.download = suggestedFileName;
+                                            document.body.appendChild(a);
+                                            a.click();
+                                            window.URL.revokeObjectURL(url);
+                                        });
+                                    })
+                                    .catch(error => {
+                                        console.error('Error downloading file:', error);
+                                    });
+                            };
+                        }(link, lastElement);
+
+                        cell.appendChild(buttonElement);
+                    } else {
+                        cell.textContent = '-';
+                    }
+
+                    return cell;
+                }
+
+                totalElement.textContent = `Total: ${totalCount}`;
+                submittedElement.textContent = `Submitted: ${submittedCount}`;
+                processElement.textContent = `Process: ${processCount}`;
+                completedElement.textContent = `Completed: ${completedCount}`;
+                failedElement.textContent = `Failed: ${failedCount}`
+
+            } else {
+                console.log("no data");
+            }
+        })
+        .catch(error => {
+            console.log("er", error);
+            failedMsg.innerHTML = "Error fetching dashboard data";
+            setTimeout(() => {
+                failedClosePopup();
+            }, 5000);
+            showFailedPopup();
         });
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch dashboard data');
-            // failedMsg.innerHTML = data.error;
-            // setTimeout(() => {
-            //     failedClosePopup();
-            // }, 5000);
-            // showFailedPopup();
-        }
-
-        const data = await response.json();
-        console.log('Dashboard Data:', data);
-
-    } catch (error) {
-        console.error('Error fetching dashboard data:', error.message);
-    }
 }
 
 fetchDashboardData();

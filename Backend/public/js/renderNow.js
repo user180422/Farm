@@ -63,55 +63,58 @@ function handleFormSubmission(event) {
     const folderInput = document.getElementById('folderInput');
     const selectedFiles = folderInput.files;
 
+    // Check if selected files are ZIP files
+    if (!validateFiles(selectedFiles)) {
+        failedMsg.innerHTML = "Please select valid ZIP files.";
+        showFailedPopup();
+        return;
+    }
+
     const formData = new FormData();
     for (let i = 0; i < selectedFiles.length; i++) {
-        console.log("in loop", selectedFiles[i].name);
-        formData.append(`files`, selectedFiles[i]);
+        formData.append('files', selectedFiles[i]);
     }
+
+    // Replace the existing headers with 'Authorization' if needed
+    const headers = {
+        'Authorization': `Bearer ${token}`,
+    };
 
     fetch('http://localhost:4000/api/uploads', {
         method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
+        headers: headers,
         body: formData,
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                window.location.href = 'dashboard.html'
-            } else {
-                console.log("data", data);
-                failedMsg.innerHTML = data.error;
-                setTimeout(() => {
-                    failedClosePopup();
-                }, 5000);
-                showFailedPopup();
-            }
-        })
-        .catch(error => {
-            console.log("error", error);
-            failedMsg.innerHTML = error;
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Handle success
+            window.location.href = 'dashboard.html'
+        } else {
+            console.log("data", data);
+            failedMsg.innerHTML = data.error;
             setTimeout(() => {
                 failedClosePopup();
             }, 5000);
             showFailedPopup();
-        });
+        }
+    })
+    .catch(error => {
+        console.error("error", error);
+        failedMsg.innerHTML = error.message || "An error occurred.";
+        setTimeout(() => {
+            failedClosePopup();
+        }, 5000);
+        showFailedPopup();
+    });
 }
 
+
+// Validate if the selected files are ZIP files
 function validateFiles(files) {
-    const supportedExtensions = ['.blend', '.fbx', '.obj', '.stl', '.abc'];
-
     for (const file of files) {
-        const fileName = file.name.toLowerCase().trim();
-        const lastDotIndex = fileName.lastIndexOf(".");
-
-        if (lastDotIndex === -1) {
-            return false;
-        }
-
-        const fileExtension = fileName.slice(lastDotIndex);
-        if (!supportedExtensions.includes(fileExtension)) {
+        const lowerCaseType = file.type.toLowerCase();
+        if (lowerCaseType !== 'application/zip' && lowerCaseType !== 'application/x-zip-compressed') {
             return false;
         }
     }
