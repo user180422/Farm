@@ -33,6 +33,8 @@ exports.checkoutSession = async (req, res) => {
             cancel_url: 'http://localhost:4000/cancel.html',
         });
 
+        console.log("session", session);
+
         const client = await connectToCluster();
         const database = client.db("Farm");
         const Collection = database.collection('Users');
@@ -68,7 +70,6 @@ exports.userSession = async (req, res) => {
         const userSession = await Collection.findOne({ email: email });
 
         console.log("usersession", userSession);
-
         if (!userSession) {
             return res.status(404).json({ error: 'User session not found' });
         }
@@ -81,20 +82,53 @@ exports.userSession = async (req, res) => {
 };
 
 exports.paymentSuccess = async (req, res) => {
-    const subscriptionId = req.params.id;
+    const sessionId = req.body.id;
+    const user = req.user.email
+    console.log("session", sessionId);
 
     try {
-        const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-        console.log("subscription", subscription);
+        const session = await stripe.checkout.sessions.retrieve(sessionId);
+        console.log("session", session);
 
-        // const paymentStatus = subscription.latest_invoice.payment_intent.status;
+        if (session.payment_status === 'paid') {
 
-        // res.json({
-        //     subscription: subscription,
-        //     paymentStatus: paymentStatus,
-        // });
+            const endDate = new Date(session.expires_at * 1000);
+
+            const client = await connectToCluster();
+            const database = client.db("Farm");
+            const Collection = database.collection('Users');
+            const result = await Collection.updateOne(
+                { email: user },
+                {
+                    $set: {
+                        subscription: {
+                            sessionId: session.id,
+                            endDate: endDate,
+                            subscription: session.subscription,
+                            paymentStatus: session.payment_status,
+                        }
+                    }
+                }
+            );
+
+            res.json({
+                endDate: endDate,
+                subscription: session.subscription,
+                paymentStatus: session.payment_status,
+            });
+            
+        } else {
+            res.status(400).json({ error: 'Payment not successful' });
+        }
     } catch (error) {
-        console.error('Error retrieving subscription:', error.message);
-        res.status(500).json({ error: 'Internal Server Error' });
+        console.error('Error retrieving session or subscription:', error.message);
+
+        if (error.statusCode === 404) {
+            res.status(404).json({ error: 'Session not found' });
+        } else {
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
     }
 };
+
+

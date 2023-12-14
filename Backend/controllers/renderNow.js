@@ -74,3 +74,11 @@ exports.uploadFile = async (req, res) => {
     }
 }
 
+exports.subscriptionStatus = (req, res) => {
+    if (req.subscriptionStatus === 'active') {
+        res.json({ status: req.subscriptionStatus });
+    } else {
+        res.json({ status: 'inActive' });
+    }
+};
+

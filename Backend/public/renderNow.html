@@ -142,16 +142,16 @@
     <div class="container-fluid form-container p-5" data-aos="fade-up">
         <div class="container text-center p-5">
             <form class="row g-3 p-5" onsubmit="handleFormSubmission(event)" enctype="multipart/form-data">
+                <div>
+                    <p id="msg" class="text-danger">Subscription needed to upload files</p>
+                </div>
                 <div class="col-md-12">
                     <label for="folderInput" class="form-label">
                         <input type="file" id="folderInput" name="files" class="form-control" accept=".zip">
                     </label>
                 </div>
                 <div class="col-md-12">
-                    <div id="fileList"></div>
-                </div>
-                <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" id="submit-btn" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>

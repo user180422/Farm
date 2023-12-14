@@ -52,14 +52,14 @@ async function getUserSession() {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
-        }
+        },
     };
 
     try {
         const response = await fetch(`http://localhost:4000/api/user-session`, requestOptions);
         const data = await response.json();
 
-        console.log("data", data);
+        console.log("data this ", data);
 
         if (data.sessionId) {
             subsId = data.sessionId
@@ -74,30 +74,87 @@ async function getUserSession() {
 
 getUserSession()
 
-let subsId 
+// const getSubscription = async () => {
 
+//     console.log("working first");
+
+//     const requestOptions = {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Authorization': `Bearer ${token}`
+//         },
+//         body: JSON.stringify({ id: subsId })
+//     };
+
+//     try {
+//         console.log("working second");
+
+//         if (!subsId) {
+//             alert('Subscription ID is required.');
+//             return;
+//         }   
+
+//         const response = await fetch(`http://localhost:4000/api/sub`, requestOptions);
+//         if(response){
+//             const data =
+//         }
+
+//     } catch (error) {
+//         console.log('Error:', error);
+//     }
+// }
+
+function failedClosePopup(popupId) {
+    var popup = document.getElementById("failedPopup");
+    popup.style.display = 'none';
+    window.location.href = 'index.html'
+}
+function showFailedPopup(popupId) {
+    var popup = document.getElementById("failedPopup");
+    popup.style.display = 'block';
+}
+
+let subsId
 const getSubscription = async () => {
-    try {
-        const subscriptionId = subsId
 
-        if (!subscriptionId) {
+    const failedMsg = document.querySelector(".failedMsg");
+
+    try {
+
+        if (!subsId) {
             alert('Subscription ID is required.');
             return;
         }
 
-        const response = await fetch(`http://localhost:4000/api/subscription?id=${subscriptionId}`);
-
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.error || 'Failed to retrieve subscription');
-        }
+        const response = await fetch('http://localhost:4000/api/sub', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ id: subsId }),
+        });
 
         const data = await response.json();
-        console.log('Subscription:', data.subscription);
-        console.log('Payment Status:', data.paymentStatus);
 
+        if (data.paymentStatus === 'paid') {
+            window.location.href = 'renderNow.html'
+        } else {
+            failedMsg.innerHTML = "Payment Failed Try Again"
+            setTimeout(() => {
+                failedClosePopup();
+            }, 5000);
+            showFailedPopup();
+        }
     } catch (error) {
-        console.error('Error:', error.message);
+        failedMsg.innerHTML = "Somthing went wrong"
+        setTimeout(() => {
+            failedClosePopup();
+        }, 5000);
+        showFailedPopup();
     }
-}
+};
+
+
 

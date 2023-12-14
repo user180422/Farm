@@ -85,28 +85,28 @@ function handleFormSubmission(event) {
         headers: headers,
         body: formData,
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Handle success
-            window.location.href = 'dashboard.html'
-        } else {
-            console.log("data", data);
-            failedMsg.innerHTML = data.error;
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Handle success
+                window.location.href = 'dashboard.html'
+            } else {
+                console.log("data", data);
+                failedMsg.innerHTML = data.error;
+                setTimeout(() => {
+                    failedClosePopup();
+                }, 5000);
+                showFailedPopup();
+            }
+        })
+        .catch(error => {
+            console.error("error", error);
+            failedMsg.innerHTML = error.message || "An error occurred.";
             setTimeout(() => {
                 failedClosePopup();
             }, 5000);
             showFailedPopup();
-        }
-    })
-    .catch(error => {
-        console.error("error", error);
-        failedMsg.innerHTML = error.message || "An error occurred.";
-        setTimeout(() => {
-            failedClosePopup();
-        }, 5000);
-        showFailedPopup();
-    });
+        });
 }
 
 
@@ -121,43 +121,36 @@ function validateFiles(files) {
     return true;
 }
 
-function showFileList() {
-    const folderInput = document.getElementById('folderInput');
-    const selectedFiles = folderInput.files;
+const folderInput = document.getElementById('folderInput');
+const msgCon = document.getElementById('msg')
+const submitBtn = document.getElementById('submit-btn');
 
-    const fileListPopup = document.getElementById('fileListPopup');
-    const fileList = document.getElementById('fileList');
-
-    fileList.innerHTML = '';
-    fileListPopup.style.display = 'block';
-
-    for (let i = 0; i < selectedFiles.length; i++) {
-        const file = selectedFiles[i];
-        const listItem = document.createElement('li');
-
-        listItem.innerHTML = `${file.name} <button onclick="removeFile(${i})">❌</button>`;
-        fileList.appendChild(listItem);
-    }
+function checker() {
+    fetch('http://localhost:4000/api/subStatus', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("data", data);
+            if (data.status == "active") {
+                msgCon.style.display = 'none'
+            } else{
+                folderInput.disabled = true;
+                submitBtn.disabled = true;
+                msgCon.style.display = 'block'
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
-function closeFileListPopup() {
-    const fileListPopup = document.getElementById('fileListPopup');
-    fileListPopup.style.display = 'none';
-}
-
-function removeFile(index) {
-    const folderInput = document.getElementById('folderInput');
-    const selectedFiles = folderInput.files;
-
-    const updatedFiles = [...selectedFiles];
-    updatedFiles.splice(index, 1);
-
-    const newDataTransfer = new DataTransfer();
-    updatedFiles.forEach((file) => {
-        newDataTransfer.items.add(file);
-    });
-
-    folderInput.files = newDataTransfer.files;
-
-    showFileList();
-}
+checker()

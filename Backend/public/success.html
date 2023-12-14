@@ -9,6 +9,18 @@
 </head>
 
 <body>
+
+  <div class="popup" id="failedPopup">
+    <div class="popup-content d-flex align-items-center">
+      <div>
+        <p class="failedMsg"></p>
+      </div>
+      <div>
+        <span class="close" onclick="failedClosePopup('failedPopup')">&times;</span>
+      </div>
+    </div>
+  </div>
+
   <div class="container">
     <div class="title">Payment Successful</div>
     <div class="icon">✔️</div>
@@ -17,4 +29,5 @@
 </body>
 
 <script src="./js/success.js"></script>
+
 </html>
