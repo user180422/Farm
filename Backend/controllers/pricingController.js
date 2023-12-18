@@ -97,7 +97,7 @@ exports.userSession = async (req, res) => {
 
 exports.paymentSuccess = async (req, res) => {
     const sessionId = req.body.id;
-    const user = req.user.email
+    const user = req.user.email;
     console.log("session", sessionId);
 
     try {
@@ -109,26 +109,30 @@ exports.paymentSuccess = async (req, res) => {
             const client = await connectToCluster();
             const database = client.db("Farm");
             const Collection = database.collection('Users');
-            const findPrice = await Collection.findOne({ email: user })
-            const existingPrice = findPrice.subscription.totalPrice
-            const result = await Collection.updateOne(
-                { email: user },
-                {
-                    $set: {
-                        subscription: {
-                            sessionId: session.id,
-                            totalPrice: existingPrice + session.amount_total / 100,
-                            paymentStatus: session.payment_status,
-                        }
-                    }
-                }
-            );
+            const findPrice = await Collection.findOne({ email: user });
 
-            res.json({
-                sessionId: session.id,
-                totalPrice: session.amount_total,
-                paymentStatus: session.payment_status,
-            });
+            if (findPrice && findPrice.subscription) {
+                const result = await Collection.updateOne(
+                    { email: user },
+                    {
+                        $set: {
+                            sessionId: session.id,
+                            totalPrice: session.payment_status,
+                        },
+                        $inc: {
+                            paymentStatus: session.amount_total / 100,
+                        },
+                    }
+                );
+
+                res.json({
+                    sessionId: session.id,
+                    totalPrice: session.amount_total,
+                    paymentStatus: session.payment_status,
+                });
+            } else {
+                res.status(400).json({ error: 'User subscription not found' });
+            }
 
         } else {
             res.status(400).json({ error: 'Payment not successful' });
@@ -143,5 +147,3 @@ exports.paymentSuccess = async (req, res) => {
         }
     }
 };
-
-
