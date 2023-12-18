@@ -19,18 +19,19 @@ exports.checkoutSession = async (req, res) => {
     const { priceId } = req.body;
     const user = req.user.email;
     console.log("working", priceId);
+
     try {
+        // Create a checkout session with proper line_items
         const session = await stripe.checkout.sessions.create({
-            payment_method_types: ['card'],
+            cancel_url: 'http://localhost:4000/cancel.html',
             line_items: [
                 {
-                    price: priceId == 1 ? basic : priceId == 2 ? standard : priceId == 3 ? premium : priceId == 4 ? business : '',
+                    price: 'price_1ONckGSEWeEEkuvGnYLET11a',
                     quantity: 1,
                 },
             ],
-            mode: 'subscription',
-            success_url: `http://localhost:4000/success.html`,
-            cancel_url: 'http://localhost:4000/cancel.html',
+            mode: 'payment',
+            success_url: 'http://localhost:4000/success.html',
         });
 
         console.log("session", session);
@@ -38,25 +39,38 @@ exports.checkoutSession = async (req, res) => {
         const client = await connectToCluster();
         const database = client.db("Farm");
         const Collection = database.collection('Users');
-        const result = await Collection.updateOne(
-            { email: user },
-            {
-                $set: {
-                    subscription: {
-                        sessionId: session.id
+        const findPrice = await Collection.findOne({ email: user });
+
+        // Ensure that findPrice and subscription exist before accessing nested properties
+        if (findPrice && findPrice.subscription) {
+            const existingPrice = findPrice.subscription.totalPrice;
+
+            // Update the user's subscription details
+            const result = await Collection.updateOne(
+                { email: user },
+                {
+                    $set: {
+                        subscription: {
+                            sessionId: session.id,
+                            totalPrice: existingPrice,
+                            paymentStatus: session.payment_status,
+                        }
                     }
                 }
-            }
-        );
+            );
 
-        console.log("Result", result);
+            console.log("Result", result);
 
-        res.json({ session: session });
+            res.json({ session: session });
+        } else {
+            res.status(400).json({ error: 'User subscription not found' });
+        }
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
-    }
+    } 
 };
+
 
 exports.userSession = async (req, res) => {
 
@@ -92,19 +106,18 @@ exports.paymentSuccess = async (req, res) => {
 
         if (session.payment_status === 'paid') {
 
-            const endDate = new Date(session.expires_at * 1000);
-
             const client = await connectToCluster();
             const database = client.db("Farm");
             const Collection = database.collection('Users');
+            const findPrice = await Collection.findOne({ email: user })
+            const existingPrice = findPrice.subscription.totalPrice
             const result = await Collection.updateOne(
                 { email: user },
                 {
                     $set: {
                         subscription: {
                             sessionId: session.id,
-                            endDate: endDate,
-                            subscription: session.subscription,
+                            totalPrice: existingPrice + session.amount_total / 100,
                             paymentStatus: session.payment_status,
                         }
                     }
@@ -112,11 +125,11 @@ exports.paymentSuccess = async (req, res) => {
             );
 
             res.json({
-                endDate: endDate,
-                subscription: session.subscription,
+                sessionId: session.id,
+                totalPrice: session.amount_total,
                 paymentStatus: session.payment_status,
             });
-            
+
         } else {
             res.status(400).json({ error: 'Payment not successful' });
         }

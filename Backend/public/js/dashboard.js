@@ -69,7 +69,11 @@ const processElement = document.getElementById('process');
 const completedElement = document.getElementById('completed');
 const failedElement = document.getElementById('failed');
 const noData = document.getElementById('no-data');
+const totalBalance = document.getElementById('balance');
+const spendCon = document.getElementById('spend')
 
+let balancePrice = 0
+let priceUsed = 0
 let totalCount = 0
 let submittedCount = 0;
 let processCount = 0;
@@ -86,6 +90,7 @@ async function fetchDashboardData() {
     })
         .then(response => response.json())
         .then(data => {
+            console.log("data", data);
             if (data.success) {
                 totalCount = data.data.length
                 data.data.forEach(item => {
@@ -192,12 +197,15 @@ async function fetchDashboardData() {
                     return cell;
                 }
 
-                totalElement.textContent = totalCount ? `Total: ${totalCount}` : 'Total: 0';
+                totalElement.textContent = totalCount ? `Total Projects: ${totalCount}` : 'Total Projects: 0';
                 submittedElement.textContent = submittedCount ? `Submitted: ${submittedCount}` : 'Submitted: 0';
                 processElement.textContent = processCount ? `Process: ${processCount}` : 'Process: 0';
                 completedElement.textContent = completedCount ? `Completed: ${completedCount}` : 'Completed: 0';
                 failedElement.textContent = failedCount ? `Failed: ${failedCount}` : 'Failed: 0';
-
+                totalBalance.textContent = data.userData[0].subscription.totalPrice ? 
+                `Balance: $ ${data.userData[0].subscription.totalPrice}` : 'Balance: $0'
+                spendCon.textContent = data.userData[0].priceUsed ? `Spend: $ ${data.userData[0].priceUsed}` :
+                'Spend: $0'
 
             } else {
                 noData.textContent = "No Data To Shown"

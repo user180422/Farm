@@ -9,10 +9,13 @@ exports.dashboardData = async (req, res) => {
         const client = await connectToCluster();
         const database = client.db("Farm");
         const usersCollection = database.collection('userFilePath');
+        const userDataCollection = database.collection('Users')
+
+        const userData = await userDataCollection.find({ email: user }).toArray()
         const existingData = await usersCollection.find({ email: user }).toArray()
 
         if (existingData.length > 0) {
-            res.status(200).json({ success: 'Data fetched successfully', data: existingData });
+            res.status(200).json({ success: 'Data fetched successfully', data: existingData, userData });
         } else {
             res.status(404).json({ error: 'No Data found' });
         }

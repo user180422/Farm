@@ -74,37 +74,6 @@ async function getUserSession() {
 
 getUserSession()
 
-// const getSubscription = async () => {
-
-//     console.log("working first");
-
-//     const requestOptions = {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'Authorization': `Bearer ${token}`
-//         },
-//         body: JSON.stringify({ id: subsId })
-//     };
-
-//     try {
-//         console.log("working second");
-
-//         if (!subsId) {
-//             alert('Subscription ID is required.');
-//             return;
-//         }   
-
-//         const response = await fetch(`http://localhost:4000/api/sub`, requestOptions);
-//         if(response){
-//             const data =
-//         }
-
-//     } catch (error) {
-//         console.log('Error:', error);
-//     }
-// }
-
 function failedClosePopup(popupId) {
     var popup = document.getElementById("failedPopup");
     popup.style.display = 'none';
@@ -137,7 +106,7 @@ const getSubscription = async () => {
         });
 
         const data = await response.json();
-
+        console.log("data", data);
         if (data.paymentStatus === 'paid') {
             window.location.href = 'renderNow.html'
         } else {

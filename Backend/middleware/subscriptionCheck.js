@@ -20,24 +20,9 @@ exports.subscriptionCheck = async (req, res, next) => {
         console.log("userSession Middle", userSession);
         if (userSession &&
             userSession.subscription &&
-            userSession.subscription.endDate) {
+            userSession.subscription.paymentStatus == "paid") {
 
-            const currentDate = new Date();
-            const expiryDate = new Date(userSession.subscription.endDate);
-
-            const currentDateString = currentDate.toISOString();
-            const expiryDateString = expiryDate.toISOString();
-
-            // Split dates based on 'T'
-            const [currentDatePart, currentTimePart] = currentDateString.split('T');
-            const [expiryDatePart, expiryTimePart] = expiryDateString.split('T');
-
-            if (currentDatePart < expiryDatePart) {
-                req.subscriptionStatus = "active";
-            } else {
-                req.subscriptionStatus = "expired";
-            }
-
+            req.subscriptionStatus = "active";
             next()
         } else {
             req.subscriptionStatus = "expired";

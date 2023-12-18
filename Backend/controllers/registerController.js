@@ -108,7 +108,8 @@ exports.createUser = async (req, res) => {
             role: "user",
             password: hashedPassword,
             verificationToken: generateUniqueToken(),
-            isEmailVerified: false
+            isEmailVerified: false,
+            priceUsed: 0
         };
 
         const emailSent = await sendWelcomeEmail(email, userToInsert);

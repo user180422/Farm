@@ -109,7 +109,6 @@ function handleFormSubmission(event) {
         });
 }
 
-
 // Validate if the selected files are ZIP files
 function validateFiles(files) {
     for (const file of files) {
@@ -142,7 +141,7 @@ function checker() {
             console.log("data", data);
             if (data.status == "active") {
                 msgCon.style.display = 'none'
-            } else{
+            } else {
                 folderInput.disabled = true;
                 submitBtn.disabled = true;
                 msgCon.style.display = 'block'
