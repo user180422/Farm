@@ -37,7 +37,7 @@ app.get('/dashboard.html', loginCheck.dashboardCheck, (req, res) => {
     res.sendFile(path.join(__dirname, '/public', 'dashboard.html'));
 });
 
-app.get('/refund.html', loginCheck.dashboardCheck, (req, res) => {
+app.get('/refund.html', loginCheck.authenticateToken, (req, res) => {
     res.sendFile(path.join(__dirname, '/public', 'refund.html'));
 });
 

@@ -34,14 +34,22 @@ if (token) {
                 logoutElements.style.display = 'none';
                 dashboard.style.display = 'none'
                 renderNow.style.display = 'none'
+                window.location.href = 'login.html'
             }
         })
         .catch(error => console.error('Error:', error));
 } else {
+    console.log("else");
     loginElements.style.display = 'block';
     logoutElements.style.display = 'none';
     dashboard.style.display = 'none'
     renderNow.style.display = 'none'
+    window.location.href = 'login.html'
+}
+
+function logout() {
+    document.cookie = "farm= ";
+    window.location.href = 'index.html'
 }
 
 function failedClosePopup(popupId) {
