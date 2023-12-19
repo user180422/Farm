@@ -202,8 +202,8 @@ async function fetchDashboardData() {
                 processElement.textContent = processCount ? `Process: ${processCount}` : 'Process: 0';
                 completedElement.textContent = completedCount ? `Completed: ${completedCount}` : 'Completed: 0';
                 failedElement.textContent = failedCount ? `Failed: ${failedCount}` : 'Failed: 0';
-                totalBalance.textContent = data.userData[0].subscription.totalPrice ? 
-                `Balance: $ ${data.userData[0].subscription.totalPrice}` : 'Balance: $0'
+                totalBalance.textContent = data.userData[0].totalPrice ? 
+                `Balance: $ ${data.userData[0].totalPrice}` : 'Balance: $0'
                 spendCon.textContent = data.userData[0].priceUsed ? `Spend: $ ${data.userData[0].priceUsed}` :
                 'Spend: $0'
 

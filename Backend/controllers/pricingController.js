@@ -1,20 +1,6 @@
 const { connectToCluster } = require('../database/connect');
 const stripe = require('stripe')(process.env.STRIPE_SK);
 
-const [
-    basic,
-    standard,
-    premium,
-    business
-] = [
-        'price_1OJdDXSEWeEEkuvGL4sifcUK',
-        'price_1OJgMBSEWeEEkuvGQUZrbEsz',
-        'price_1OJgMuSEWeEEkuvGufWnboEG',
-        'price_1OJgNRSEWeEEkuvGWJIv56jx'
-    ]
-
-console.log("basic", basic);
-
 exports.checkoutSession = async (req, res) => {
     const { priceId } = req.body;
     const user = req.user.email;
@@ -41,11 +27,9 @@ exports.checkoutSession = async (req, res) => {
         const Collection = database.collection('Users');
         const findPrice = await Collection.findOne({ email: user });
 
-        // Ensure that findPrice and subscription exist before accessing nested properties
-        if (findPrice && findPrice.subscription) {
-            const existingPrice = findPrice.subscription.totalPrice;
+        if (findPrice) {
+            const existingPrice = findPrice.subscription ? findPrice.subscription.totalPrice : 0;
 
-            // Update the user's subscription details
             const result = await Collection.updateOne(
                 { email: user },
                 {
@@ -63,14 +47,13 @@ exports.checkoutSession = async (req, res) => {
 
             res.json({ session: session });
         } else {
-            res.status(400).json({ error: 'User subscription not found' });
+            res.status(400).json({ error: 'User not found' });
         }
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
-    } 
+    }
 };
-
 
 exports.userSession = async (req, res) => {
 
@@ -108,22 +91,37 @@ exports.paymentSuccess = async (req, res) => {
 
             const client = await connectToCluster();
             const database = client.db("Farm");
-            const Collection = database.collection('Users');
-            const findPrice = await Collection.findOne({ email: user });
+            const userCollection = database.collection('Users');
+            const pricingCollection = database.collection('Pricing');
 
-            if (findPrice && findPrice.subscription) {
-                const result = await Collection.updateOne(
+            const findUser = await userCollection.findOne({ email: user });
+
+            if (findUser && findUser.subscription) {
+                const existingPrice = findUser.subscription.totalPrice;
+                const result = await userCollection.updateOne(
                     { email: user },
                     {
                         $set: {
-                            sessionId: session.id,
-                            totalPrice: session.payment_status,
+                            subscription: {
+                                sessionId: session.id,
+                                paymentStatus: session.payment_status,
+                            },
+                            priceUsed: 0
                         },
                         $inc: {
-                            paymentStatus: session.amount_total / 100,
+                            totalPrice: existingPrice + session.amount_total / 100,
                         },
                     }
                 );
+
+                const updatePriceResult = await pricingCollection.insertOne({
+                    email: user,
+                    sessionId: session.id,
+                    paymentIntent: session.payment_intent,
+                    totalPrice: session.amount_total / 100,
+                    currency: session.currency,
+                    refunded: 0
+                });
 
                 res.json({
                     sessionId: session.id,
@@ -147,3 +145,66 @@ exports.paymentSuccess = async (req, res) => {
         }
     }
 };
+
+exports.paymentRefund = async (req, res) => {
+    const userEmail = req.user.email;
+    const { refundAmount } = req.body;
+
+    try {
+        const client = await connectToCluster();
+        const database = client.db("Farm");
+        const pricingCollection = database.collection('Pricing');
+        const userCollection = database.collection('Users');
+        const findTotal = await userCollection.findOne({ email: userEmail });
+        const transactions = await pricingCollection.find({ email: userEmail }).toArray();
+
+        let remainingRefundAmount = parseInt(refundAmount) || 0;
+
+        if (remainingRefundAmount > findTotal.totalPrice) {
+            return res.status(400).json({ error: 'Refund amount cannot be greater than the total refunded amount.' });
+        }
+
+        for (const transaction of transactions) {
+
+            const refundedAmount = parseInt(transaction.refunded) || 0;
+            const transactionAmount = parseInt(transaction.totalPrice) || 0;
+            const remainingRefundableAmount = transactionAmount - refundedAmount;
+
+            if (isNaN(remainingRefundableAmount) || isNaN(transactionAmount)) {
+                continue;
+            }
+
+            const refundAmountForTransaction = Math.min(remainingRefundAmount, remainingRefundableAmount);
+
+            if (refundAmountForTransaction > 0) {
+                const refund = await stripe.refunds.create({
+                    payment_intent: transaction.paymentIntent,
+                    amount: Math.round(refundAmountForTransaction * 100),
+                });
+
+                const updatedTransaction = await pricingCollection.findOneAndUpdate(
+                    { sessionId: transaction.sessionId },
+                    { $inc: { refunded: refundAmountForTransaction } },
+                    { returnDocument: 'after' }
+                );
+
+                await userCollection.updateOne(
+                    { email: userEmail },
+                    { $set: { totalPrice: findTotal.totalPrice - refundAmount } }
+                );
+
+                remainingRefundAmount -= refundAmountForTransaction;
+            }
+
+            if (remainingRefundAmount <= 0) {
+                break;
+            }
+        }
+
+        res.json({ success: 'Partial refund request processed successfully.' });
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
