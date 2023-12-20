@@ -97,7 +97,8 @@ exports.paymentSuccess = async (req, res) => {
             const findUser = await userCollection.findOne({ email: user });
 
             if (findUser && findUser.subscription) {
-                const existingPrice = findUser.subscription.totalPrice;
+                const existingPrice = findUser.totalPrice;
+                console.log("payment", existingPrice);
                 const result = await userCollection.updateOne(
                     { email: user },
                     {
@@ -106,10 +107,8 @@ exports.paymentSuccess = async (req, res) => {
                                 sessionId: session.id,
                                 paymentStatus: session.payment_status,
                             },
-                            priceUsed: 0
-                        },
-                        $inc: {
-                            totalPrice: existingPrice + session.amount_total / 100,
+                            priceUsed: 0,
+                            totalPrice: existingPrice ? (existingPrice + session.amount_total / 100) : (session.amount_total / 100)
                         },
                     }
                 );
@@ -146,65 +145,90 @@ exports.paymentSuccess = async (req, res) => {
     }
 };
 
-exports.paymentRefund = async (req, res) => {
-    const userEmail = req.user.email;
-    const { refundAmount } = req.body;
+exports.getUserPayments = async (req, res) => {
+
+    const user = req.user.email;
 
     try {
         const client = await connectToCluster();
         const database = client.db("Farm");
-        const pricingCollection = database.collection('Pricing');
-        const userCollection = database.collection('Users');
-        const findTotal = await userCollection.findOne({ email: userEmail });
-        const transactions = await pricingCollection.find({ email: userEmail }).toArray();
+        const userCollection = database.collection('Pricing');
 
-        let remainingRefundAmount = parseInt(refundAmount) || 0;
+        const payment = await userCollection.find({ email: user }).toArray();
 
-        if (remainingRefundAmount > findTotal.totalPrice) {
-            return res.status(400).json({ error: 'Refund amount cannot be greater than the total refunded amount.' });
+        if (!user) {
+            return res.status(200).json({ error: "No Payments" })
         }
 
-        for (const transaction of transactions) {
-
-            const refundedAmount = parseInt(transaction.refunded) || 0;
-            const transactionAmount = parseInt(transaction.totalPrice) || 0;
-            const remainingRefundableAmount = transactionAmount - refundedAmount;
-
-            if (isNaN(remainingRefundableAmount) || isNaN(transactionAmount)) {
-                continue;
-            }
-
-            const refundAmountForTransaction = Math.min(remainingRefundAmount, remainingRefundableAmount);
-
-            if (refundAmountForTransaction > 0) {
-                const refund = await stripe.refunds.create({
-                    payment_intent: transaction.paymentIntent,
-                    amount: Math.round(refundAmountForTransaction * 100),
-                });
-
-                const updatedTransaction = await pricingCollection.findOneAndUpdate(
-                    { sessionId: transaction.sessionId },
-                    { $inc: { refunded: refundAmountForTransaction } },
-                    { returnDocument: 'after' }
-                );
-
-                await userCollection.updateOne(
-                    { email: userEmail },
-                    { $set: { totalPrice: findTotal.totalPrice - refundAmount } }
-                );
-
-                remainingRefundAmount -= refundAmountForTransaction;
-            }
-
-            if (remainingRefundAmount <= 0) {
-                break;
-            }
-        }
-
-        res.json({ success: 'Partial refund request processed successfully.' });
+        res.json({ data: payment })
     } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
+        console.error('Error:', error);
+        throw new Error('Failed to retrieve user payments');
     }
 };
+
+
+// exports.paymentRefund = async (req, res) => {
+//     const userEmail = req.user.email;
+//     const { refundAmount } = req.body;
+
+//     try {
+//         const client = await connectToCluster();
+//         const database = client.db("Farm");
+//         const pricingCollection = database.collection('Pricing');
+//         const userCollection = database.collection('Users');
+//         const findTotal = await userCollection.findOne({ email: userEmail });
+//         const transactions = await pricingCollection.find({ email: userEmail }).toArray();
+
+//         let remainingRefundAmount = parseInt(refundAmount) || 0;
+//         let totalRefundAmount = 0;
+
+//         if (remainingRefundAmount > findTotal.totalPrice) {
+//             return res.status(400).json({ error: 'Refund amount cannot be greater than the total refunded amount.' });
+//         }
+
+//         for (const transaction of transactions) {
+//             const refundedAmount = parseInt(transaction.refunded) || 0;
+//             const transactionAmount = parseInt(transaction.totalPrice) || 0;
+//             const remainingRefundableAmount = transactionAmount - refundedAmount;
+
+//             if (isNaN(remainingRefundableAmount) || isNaN(transactionAmount)) {
+//                 continue;
+//             }
+
+//             const refundAmountForTransaction = Math.min(remainingRefundAmount, remainingRefundableAmount);
+
+//             if (refundAmountForTransaction > 0) {
+//                 const refund = await stripe.refunds.create({
+//                     payment_intent: transaction.paymentIntent,
+//                     amount: Math.round(refundAmountForTransaction * 100),
+//                 });
+
+//                 console.log("refund", refund);
+
+//                 const updatedTransaction = await pricingCollection.findOneAndUpdate(
+//                     { sessionId: transaction.sessionId },
+//                     {
+//                         $set: { totalPrice: transaction.totalPrice - refundAmountForTransaction },
+//                         $inc: { refunded: refundAmountForTransaction }
+//                     },
+//                     { returnDocument: 'after' }
+//                 );
+
+//                 totalRefundAmount += refundAmountForTransaction;
+//             }
+//         }
+
+//         await userCollection.updateOne(
+//             { email: userEmail },
+//             { $set: { totalPrice: findTotal.totalPrice - totalRefundAmount } }
+//         );
+
+//         res.json({ success: 'Partial refund request processed successfully.' });
+//     } catch (error) {
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// };
+
 
 

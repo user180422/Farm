@@ -202,10 +202,10 @@ async function fetchDashboardData() {
                 processElement.textContent = processCount ? `Process: ${processCount}` : 'Process: 0';
                 completedElement.textContent = completedCount ? `Completed: ${completedCount}` : 'Completed: 0';
                 failedElement.textContent = failedCount ? `Failed: ${failedCount}` : 'Failed: 0';
-                totalBalance.textContent = data.userData[0].totalPrice ? 
-                `Balance: $ ${data.userData[0].totalPrice}` : 'Balance: $0'
+                totalBalance.textContent = data.userData[0].totalPrice ?
+                    `Balance: $ ${data.userData[0].totalPrice}` : 'Balance: $0'
                 spendCon.textContent = data.userData[0].priceUsed ? `Spend: $ ${data.userData[0].priceUsed}` :
-                'Spend: $0'
+                    'Spend: $0'
 
             } else {
                 noData.textContent = "No Data To Shown"
@@ -222,3 +222,30 @@ async function fetchDashboardData() {
 }
 
 fetchDashboardData();
+
+async function fetchUserPayments() {
+    try {
+        const response = await fetch('http://localhost:4000/api/paymentList', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        if (data.data && data.data.length > 0) {
+            // Render payment data inside modal
+        } else {
+            // No data, show a message
+        }
+    } catch (error) {
+        console.error('API Error:', error);
+    }
+}
+
+
