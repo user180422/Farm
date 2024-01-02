@@ -223,8 +223,139 @@ async function fetchDashboardData() {
 
 fetchDashboardData();
 
+// async function fetchUserPayments() {
+//     try {
+//         const response = await fetch('http://localhost:4000/api/paymentList', {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'Authorization': `Bearer ${token}`,
+//             },
+//         });
+
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+
+//         const data = await response.json();
+
+//         if (data.data && data.data.length > 0) {
+//             // Render payment data inside modal
+//         } else {
+//             // No data, show a message
+//         }
+//     } catch (error) {
+//         console.error('API Error:', error);
+//     }
+// }
+
+// refund
+function validateNumber(value) {
+    return !isNaN(parseFloat(value)) && isFinite(value);
+}
+
+function submitRefund(event) {
+
+    event.preventDefault()
+
+    const refundInput = document.getElementById('refund');
+    const refundError = document.getElementById('refundError');
+
+    const refundAmount = refundInput.value.trim();
+
+    if (!validateNumber(refundAmount)) {
+        refundError.style.color = "red"
+        refundError.textContent = 'Invalid refund amount. Please enter a valid number.';
+        return;
+    }
+
+    refundError.textContent = '';
+
+    const requestData = {
+        amount: parseFloat(refundAmount)
+    };
+
+    fetch('http://localhost:4000/api/refund', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestData),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('refund').value = ""
+                refundError.style.color = "green"
+                refundError.textContent = data.success;
+                setTimeout(() => {
+                    refundError.textContent = '';
+                }, 5000);
+            } else {
+                refundError.style.color = "red"
+                refundError.textContent = data.error;
+                setTimeout(() => {
+                    refundError.textContent = '';
+                }, 5000);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+// ALL refunds
+
+async function fetchUserRefunds() {
+    try {
+
+        const container = document.querySelector('.modal-body-refund');
+        const response = await fetch('http://localhost:4000/api/refundsList', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        console.log("pay", data.data);
+        container.innerHTML = '';
+        if (data.data && data.data.length > 0) {
+            const table = document.createElement('table');
+            table.classList.add('payment-table');
+
+            const headerRow = document.createElement('tr');
+            headerRow.innerHTML = '<th>Amount</th><th>Status</th>';
+            table.appendChild(headerRow);
+
+            data.data.forEach(payment => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>$${payment.amound}</td><td>${payment.status}</td>`;
+                row.classList.add('payment-item');
+                table.appendChild(row);
+            });
+
+            container.appendChild(table);
+        } else {
+            container.style.color = "red"
+            container.style.textAlign = "center";
+            container.innerHTML = "No Refunds found";
+        }
+    } catch (error) {
+        console.error('API Error:', error);
+    }
+}
+
+// all Payment
+
 async function fetchUserPayments() {
     try {
+
+        const container = document.querySelector('.modal-body-payment');
         const response = await fetch('http://localhost:4000/api/paymentList', {
             headers: {
                 'Content-Type': 'application/json',
@@ -237,15 +368,31 @@ async function fetchUserPayments() {
         }
 
         const data = await response.json();
-
+        console.log("pay", data.data);
+        container.innerHTML = '';
         if (data.data && data.data.length > 0) {
-            // Render payment data inside modal
+            const table = document.createElement('table');
+            table.classList.add('payment-table');
+
+            const headerRow = document.createElement('tr');
+            headerRow.innerHTML = '<th>Currency</th><th>Amount</th>';
+            table.appendChild(headerRow);
+
+            data.data.forEach(payment => {
+                console.log("payment", payment);
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${payment.currency}</td><td>${payment.totalPrice}</td>`;
+                row.classList.add('payment-item');
+                table.appendChild(row);
+            });
+
+            container.appendChild(table);
         } else {
-            // No data, show a message
+            container.style.color = "red"
+            container.style.textAlign = "center";
+            container.innerHTML = "No payments found";
         }
     } catch (error) {
         console.error('API Error:', error);
     }
 }
-
-

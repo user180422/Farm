@@ -66,6 +66,9 @@ function validateAndSubmit(event) {
     var username = document.getElementById('username').value;
     var email = document.getElementById('email').value;
     var phone = document.getElementById('phone').value;
+    var paymentMethod = document.getElementById('paymentMethod').value
+    var otherMethod = document.getElementById('otherMethod').value
+    var paymentId = document.getElementById('paymentId').value;
     var password = document.getElementById('password').value;
     var confirmPassword = document.getElementById('confirmPassword').value;
 
@@ -98,19 +101,35 @@ function validateAndSubmit(event) {
         }
     }
 
-    // Validate phone
     if (!phone) {
         document.getElementById('phoneError').innerText = 'Phone number is required.';
         return;
     } else {
-        var phoneRegex = /^\d{10}$/; // Change this regex based on your phone number format
+        var phoneRegex = /^\d{10}$/; 
         if (!phoneRegex.test(phone)) {
             document.getElementById('phoneError').innerText = 'Invalid phone number. It should be 10 digits.';
             return;
         }
     }
 
-    // Validate password
+    if (!paymentMethod) {
+        document.getElementById('paymentMethodError').innerText = 'Please select a payment method.';
+        return false;
+    } else if (paymentMethod === "other") {
+        var otherMethodInput = document.getElementById("otherMethod");
+        var otherMethodValue = otherMethodInput.value.trim();
+
+        if (!otherMethodValue) {
+            document.getElementById('otherMethodError').innerText = 'Please specify the other payment method.';
+            return false;
+        }
+    }
+
+    if (!paymentId) {
+        document.getElementById('paymentIdError').innerText = 'Payment ID is required.';
+        return false;
+    }
+
     if (!password) {
         document.getElementById('passwordError').innerText = 'Password is required.';
         return;
@@ -131,7 +150,7 @@ function validateAndSubmit(event) {
         }
     }
 
-    if (!username || !email || !phone || !password || !confirmPassword) {
+    if (!username || !email || !phone || !paymentMethod || !password || !confirmPassword) {
         return;
     }
 
@@ -139,9 +158,13 @@ function validateAndSubmit(event) {
         username: username,
         email: email,
         phone: phone,
+        paymentMethod: paymentMethod != "other" ? paymentMethod : otherMethod,
+        paymentId: paymentId,
         password: password,
         confirmPassword: confirmPassword
     };
+
+    console.log("register", data);
 
     fetch('http://localhost:4000/api/createUser', {
         method: 'POST',
@@ -157,6 +180,9 @@ function validateAndSubmit(event) {
                 document.getElementById('username').value = ""
                 document.getElementById('email').value = ""
                 document.getElementById('phone').value = ""
+                document.getElementById('paymentMethod').value = ""
+                document.getElementById('otherMethod').value = ""
+                document.getElementById('paymentId').value = ""
                 document.getElementById('password').value = ""
                 document.getElementById('confirmPassword').value = ""
                 failedMsg.innerHTML = data.success
@@ -186,4 +212,22 @@ function resetErrors() {
     errorContainers.forEach(function (container) {
         container.textContent = '';
     });
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    var paymentMethodSelect = document.getElementById("paymentMethod");
+    var otherPaymentMethodDiv = document.getElementById("otherPaymentMethod");
+
+    paymentMethodSelect.addEventListener("change", function () {
+        handlePaymentMethodChange(paymentMethodSelect, otherPaymentMethodDiv);
+    });
+});
+
+function handlePaymentMethodChange(selectElement, otherMethodDiv) {
+    if (selectElement.value === "other") {
+        otherMethodDiv.style.display = "block";
+    } else {
+        otherMethodDiv.style.display = "none";
+    }
 }

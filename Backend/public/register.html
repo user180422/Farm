@@ -122,6 +122,30 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="paymentMethod" class="form-label fw-bold">Payment Method</label>
+                    <select class="form-select" id="paymentMethod">
+                        <option value="" disabled selected>Select Payment Method</option>
+                        <option value="googlePay">Google Pay</option>
+                        <option value="phonePay">Phone Pay</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="other">Other (Specify)</option>
+                    </select>
+                    <div id="paymentMethodError" class="error-message text-danger"></div>
+                </div>
+                
+                <div class="mb-3" id="otherPaymentMethod" style="display: none;">
+                    <label for="otherMethod" class="form-label fw-bold">Other Payment Method</label>
+                    <input type="text" class="form-control py-2" id="otherMethod" placeholder="Specify other payment method">
+                    <div id="otherMethodError" class="error-message text-danger"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="paymentId" class="form-label fw-bold">PaymentId</label>
+                    <input type="text" class="form-control py-2" id="paymentId" placeholder="paymentId">
+                    <div id="paymentIdError" class="error-message text-danger"></div>
+                </div>
+                
+                <div class="mb-3">
                     <label for="password" class="form-label fw-bold">Password</label>
                     <input type="password" class="form-control py-2" id="password" placeholder="password">
                     <div id="passwordError" class="error-message text-danger"></div>

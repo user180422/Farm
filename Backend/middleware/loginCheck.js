@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { connectToCluster } = require('../database/connect');
 
 exports.authenticateToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -21,9 +22,9 @@ exports.authenticateToken = (req, res, next) => {
 
 exports.dashboardCheck = (req, res, next) => {
     const authHeader = req.headers.authorization;
-console.log(
-    "dashboard middle"
-);
+    console.log(
+        "dashboard middle"
+    );
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.redirect('/login');
     }
@@ -40,4 +41,16 @@ console.log(
         console.log("middleware User");
         next();
     });
+};
+
+exports.userCheck =  (req, res, next) => {
+
+    // const user = req.user.email
+    // const client = await connectToCluster();
+    // const database = client.db("Farm");
+    // const userDataCollection = database.collection('Users')
+    // const getUser = userDataCollection.findOne({ email: user })
+
+    console.log("user middle", getUser);
+
 };

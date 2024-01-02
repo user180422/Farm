@@ -5,8 +5,11 @@ const jwt = require('jsonwebtoken');
 
 exports.createUser = async (req, res) => {
 
+    // console.log("Hello eee", req);
+
     // validation functions
-    function validateFields(username, email, phone, password, confirmPassword) {
+    function validateFields(username, email, phone, paymentMethod, paymentId, password, confirmPassword) {
+        console.log("inner");
         if (!username) {
             return 'Username is required.';
         }
@@ -21,6 +24,14 @@ exports.createUser = async (req, res) => {
             return 'Phone number is required.';
         } else if (!validatePhoneNumber(phone)) {
             return 'Invalid phone number format.';
+        }
+
+        if (!paymentMethod) {
+            return 'Payment Method required.';
+        }
+
+        if (!paymentId) {
+            return 'Payment id required.';
         }
 
         if (!password) {
@@ -82,9 +93,11 @@ exports.createUser = async (req, res) => {
         return buffer.toString('hex');
     };
 
+    console.log("req.body", req.body);
+
     // data handler
-    const { username, email, phone, password, confirmPassword } = req.body;
-    const validationError = validateFields(username, email, phone, password, confirmPassword);
+    const { username, email, phone, paymentMethod, paymentId, password, confirmPassword } = req.body;
+    const validationError = validateFields(username, email, phone, paymentMethod, paymentId, password, confirmPassword);
     if (validationError) {
         return res.status(400).json({ error: validationError });
     }
@@ -106,11 +119,15 @@ exports.createUser = async (req, res) => {
             email: email,
             phone: phone,
             role: "user",
+            paymentMethod: paymentMethod,
+            paymentId: paymentId,
             password: hashedPassword,
             verificationToken: generateUniqueToken(),
             isEmailVerified: false,
             priceUsed: 0
         };
+
+        console.log("userdata", userToInsert);
 
         const emailSent = await sendWelcomeEmail(email, userToInsert);
 
@@ -122,6 +139,7 @@ exports.createUser = async (req, res) => {
         res.status(201).json({ success: 'User Registration Successful. Check your mailbox to verify your email.' });
 
     } catch (error) {
+        console.log("error", error);
         res.status(500).json({ error: 'Internal Server Error. Please try again later.' });
     }
 };
@@ -291,7 +309,7 @@ exports.newPassword = async (req, res) => {
                 { email: email },
                 { $set: { password: hashedPassword } }
             );
-    
+
             if (result.modifiedCount === 1) {
                 res.status(200).json({ success: 'Password reset successful' });
             } else {

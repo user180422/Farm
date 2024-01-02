@@ -41,7 +41,7 @@ exports.downloadFile = async (req, res) => {
             // Uncomment the following lines if you want to stream the file to the response
             res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
             res.setHeader('Content-Type', 'application/octet-stream');
-            
+
             const fileStream = fs.createReadStream(filePath);
             console.log("file str", fileStream);
             fileStream.pipe(res);
@@ -56,3 +56,83 @@ exports.downloadFile = async (req, res) => {
     }
 };
 
+exports.refund = async (req, res) => {
+
+    console.log("body", req.body);
+
+    const currentDate = new Date();
+    const user = req.user.email;
+    const { amount } = req.body;
+    if (isNaN(amount) || amount <= 0) {
+        return res.status(400).json({ error: 'Invalid refund amount. Please enter a valid number.' });
+    }
+
+    const client = await connectToCluster();
+    const database = client.db("Farm");
+    const userData = database.collection('Users')
+    const refundCollection = database.collection('Refunds');
+
+    const amoundBalance = await userData.findOne({ email: user })
+    const amountToCheck = amoundBalance.totalPrice
+
+    if(amount > amountToCheck) {
+        return res.status(400).json({ error: 'Refund amount must be less then balance amount' });
+    }
+
+    const insertData = await refundCollection.insertOne({
+        email: user,
+        amound: amount,
+        status: "requested",
+        createdAt: currentDate
+    });
+
+    if (!insertData.insertedId || insertData.insertedId === '') {
+        return res.status(500).json({ error: 'Refund request failed' });
+    } 
+
+    return res.json({ success: 'Refund request Successfull Check status on all refunds' });
+};
+
+exports.getUserRefunds = async (req, res) => {
+
+    const user = req.user.email;
+
+    try {
+        const client = await connectToCluster();
+        const database = client.db("Farm");
+        const userCollection = database.collection('Refunds');
+
+        const payment = await userCollection.find({ email: user }).toArray();
+
+        if (!user) {
+            return res.status(200).json({ error: "No Payments" })
+        }
+
+        res.json({ data: payment })
+    } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Failed to retrieve user payments');
+    }
+};
+
+exports.getUserPayments = async (req, res) => {
+
+    const user = req.user.email;
+
+    try {
+        const client = await connectToCluster();
+        const database = client.db("Farm");
+        const userCollection = database.collection('Pricing');
+
+        const payment = await userCollection.find({ email: user }).toArray();
+
+        if (!user) {
+            return res.status(200).json({ error: "No Payments" })
+        }
+
+        res.json({ data: payment })
+    } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Failed to retrieve user payments');
+    }
+};

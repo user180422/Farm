@@ -38,3 +38,35 @@ input[type="search"]::placeholder {
     color: white;
     border: none;
 }
+
+.submit-btn {
+    background-color: #e80cc0;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.payment-table {
+    width: 100%;
+}
+
+.payment-item td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.payment-item th {
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.no-payments-message {
+    color: #ff6666; /* Example text color */
+    font-weight: bold;
+}

@@ -27,24 +27,68 @@
         </div>
     </div>
 
-    <!-- nav -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- all reunds -->
+
+    <div class="modal fade" id="allRefunds" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
+
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h5 class="modal-title" id="exampleModalLabel">All Refunds</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                <div class="modal-body-refund p-1">
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- refund request -->
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Refund Request</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-center">
+                            <label for="refund" class="form-label fw-bold">Amount For Refund</label>
+                        </div>
+                        <form id="refundForm" class="d-flex flex-column" onsubmit="submitRefund(event)">
+                            <div>
+                                <input type="number" class="form-control py-2" id="refund" name="refund"
+                                    placeholder="1000">
+                            </div>
+                            <div id="refundError" class="error-message"></div>
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="submit-btn text-center mt-3">Send Request</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- all payments -->
+
+    <div class="modal fade" id="allPayment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">All Payments</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body-payment p-1">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- nav -->
 
     <div class="container-fluid nav-bg sticky">
         <div class="container py-2 nav-bg">
@@ -119,11 +163,21 @@
                         <div>
                             <p id="total"></p>
                         </div>
-                    </div>  
-                    <div>
-                        <a class="nav-link p-1 rounded nav-space nav-link-hover login text-white" id="Register"
-                        aria-current="page" href="/refund.html">Refund</a>
-                    </div>                        
+                    </div>
+                    <div class="d-flex flex-column gap-2">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            Request Refund
+                        </button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#allRefunds" onclick="fetchUserRefunds()">
+                            All Refunds
+                        </button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#allPayment" onclick="fetchUserPayments()">
+                            All Payments
+                        </button>
+                    </div>
                 </div>
                 <div class="col-md-3 mb-2 ">
                     <div class="container mb-2 p-3 dash-inner nested-container">

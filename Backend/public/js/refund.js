@@ -174,9 +174,6 @@ function renderPaymentList(paymentData) {
                     <tr>
                         <td>${payment.currency}</td>
                         <td>Amount: ${payment.totalPrice}</td>
-                        <td>
-                            <button class="btn btn-primary" onclick="handleRefund('${payment.paymentIntent}')">Refund</button>
-                        </td>
                     </tr>
                 </tbody>
             </table>
