@@ -62,7 +62,7 @@ exports.refund = async (req, res) => {
 
     const currentDate = new Date();
     const user = req.user.email;
-    const { amount } = req.body;
+    const { amount,  paymentMethod, paymentId, } = req.body;
     if (isNaN(amount) || amount <= 0) {
         return res.status(400).json({ error: 'Invalid refund amount. Please enter a valid number.' });
     }
@@ -79,9 +79,19 @@ exports.refund = async (req, res) => {
         return res.status(400).json({ error: 'Refund amount must be less then balance amount' });
     }
 
+    if (!paymentMethod) {
+        return res.status(400).json({ error: 'Payment Method is required.' });
+    }
+
+    if (!paymentId) {
+        return res.status(400).json({ error: 'Payment Id is required.' });
+    }
+
     const insertData = await refundCollection.insertOne({
         email: user,
         amound: amount,
+        paymentMethod: paymentMethod == 'other' ? otherMethod : paymentMethod,
+        paymentId: paymentId,
         status: "requested",
         createdAt: currentDate
     });

@@ -8,7 +8,7 @@ exports.createUser = async (req, res) => {
     // console.log("Hello eee", req);
 
     // validation functions
-    function validateFields(username, email, phone, paymentMethod, paymentId, password, confirmPassword) {
+    function validateFields(username, email, phone, password, confirmPassword) {
         console.log("inner");
         if (!username) {
             return 'Username is required.';
@@ -24,14 +24,6 @@ exports.createUser = async (req, res) => {
             return 'Phone number is required.';
         } else if (!validatePhoneNumber(phone)) {
             return 'Invalid phone number format.';
-        }
-
-        if (!paymentMethod) {
-            return 'Payment Method required.';
-        }
-
-        if (!paymentId) {
-            return 'Payment id required.';
         }
 
         if (!password) {
@@ -96,8 +88,8 @@ exports.createUser = async (req, res) => {
     console.log("req.body", req.body);
 
     // data handler
-    const { username, email, phone, paymentMethod, paymentId, password, confirmPassword } = req.body;
-    const validationError = validateFields(username, email, phone, paymentMethod, paymentId, password, confirmPassword);
+    const { username, email, phone, password, confirmPassword } = req.body;
+    const validationError = validateFields(username, email, phone, password, confirmPassword);
     if (validationError) {
         return res.status(400).json({ error: validationError });
     }
@@ -119,8 +111,6 @@ exports.createUser = async (req, res) => {
             email: email,
             phone: phone,
             role: "user",
-            paymentMethod: paymentMethod,
-            paymentId: paymentId,
             password: hashedPassword,
             verificationToken: generateUniqueToken(),
             isEmailVerified: false,
@@ -182,9 +172,19 @@ exports.loginUser = async (req, res) => {
             return res.status(403).json({ error: 'Email not verified. Please activate your email.' });
         }
 
-        const token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_TOKEN, { expiresIn: '1h' });
-        res.cookie('farm', token);
-        res.status(200).json({ success: 'Login successful', userId: user._id, email: user.email, token: token });
+        if(user.role == 'admin'){
+            console.log("admin");
+            const token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_TOKEN, { expiresIn: '1h' });
+            console.log("token", token);
+            res.cookie('farmAdmin', token);
+            res.status(200).json({ success: 'Login successful', userId: user._id, email: user.email, role: 'admin', token: token });
+        } else{
+            console.log("user");
+            const token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_TOKEN, { expiresIn: '1h' });
+            console.log("token", token);
+            res.cookie('farm', token);
+            res.status(200).json({ success: 'Login successful', userId: user._id, email: user.email, role: 'user', token: token });
+        }
 
     } catch (error) {
         console.error('Error during login:', error);

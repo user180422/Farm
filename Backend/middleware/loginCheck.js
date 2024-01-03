@@ -43,14 +43,3 @@ exports.dashboardCheck = (req, res, next) => {
     });
 };
 
-exports.userCheck =  (req, res, next) => {
-
-    // const user = req.user.email
-    // const client = await connectToCluster();
-    // const database = client.db("Farm");
-    // const userDataCollection = database.collection('Users')
-    // const getUser = userDataCollection.findOne({ email: user })
-
-    console.log("user middle", getUser);
-
-};

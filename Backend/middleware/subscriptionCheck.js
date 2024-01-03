@@ -18,10 +18,7 @@ exports.subscriptionCheck = async (req, res, next) => {
         // const date = userSession.subscription.endDate
 
         console.log("userSession Middle", userSession);
-        if (userSession &&
-            userSession.subscription &&
-            userSession.subscription.paymentStatus == "paid") {
-
+        if (userSession.totalPrice > 0 ) {
             req.subscriptionStatus = "active";
             next()
         } else {

@@ -54,15 +54,37 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <div class="d-flex justify-content-center">
-                            <label for="refund" class="form-label fw-bold">Amount For Refund</label>
-                        </div>
                         <form id="refundForm" class="d-flex flex-column" onsubmit="submitRefund(event)">
+                            <div class="mb-3">
+                                <label for="paymentMethod" class="form-label fw-bold">Payment Method</label>
+                                <select class="form-select" id="paymentMethod">
+                                    <option value="" disabled selected>Select Payment Method</option>
+                                    <option value="googlePay">Google Pay</option>
+                                    <option value="phonePay">Phone Pay</option>
+                                    <option value="paypal">PayPal</option>
+                                    <option value="other">Other (Specify)</option>
+                                </select>
+                            </div>
+                            <div id="paymentMethodError" class="error-message text-danger"></div>
+                            
+                            <div class="mb-3" id="otherPaymentMethod" style="display: none;">
+                                <label for="otherMethod" class="form-label fw-bold">Other Payment Method</label>
+                                <input type="text" class="form-control py-2" id="otherMethod" placeholder="Specify other payment method">
+                            </div>
+                            <div id="otherMethodError" class="error-message text-danger"></div>
+            
+                            <div class="mb-3">
+                                <label for="paymentId" class="form-label fw-bold">PaymentId</label>
+                                <input type="text" class="form-control py-2" id="paymentId" placeholder="paymentId">
+                            </div>
+                            <div id="paymentIdError" class="error-message text-danger"></div>
+
                             <div>
+                                <label for="paymentId" class="form-label fw-bold">Amount</label>
                                 <input type="number" class="form-control py-2" id="refund" name="refund"
                                     placeholder="1000">
                             </div>
-                            <div id="refundError" class="error-message"></div>
+                            <div id="refundError" class="error-message text-danger"></div>
                             <div class="d-flex justify-content-center">
                                 <button type="submit" class="submit-btn text-center mt-3">Send Request</button>
                             </div>

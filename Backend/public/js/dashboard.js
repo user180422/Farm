@@ -223,57 +223,60 @@ async function fetchDashboardData() {
 
 fetchDashboardData();
 
-// async function fetchUserPayments() {
-//     try {
-//         const response = await fetch('http://localhost:4000/api/paymentList', {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'Authorization': `Bearer ${token}`,
-//             },
-//         });
-
-//         if (!response.ok) {
-//             throw new Error('Network response was not ok');
-//         }
-
-//         const data = await response.json();
-
-//         if (data.data && data.data.length > 0) {
-//             // Render payment data inside modal
-//         } else {
-//             // No data, show a message
-//         }
-//     } catch (error) {
-//         console.error('API Error:', error);
-//     }
-// }
-
 // refund
 function validateNumber(value) {
     return !isNaN(parseFloat(value)) && isFinite(value);
 }
 
+function validateNumber(value) {
+    return !isNaN(parseFloat(value)) && isFinite(value);
+}
+
 function submitRefund(event) {
+    // Prevent the default form submission
+    event.preventDefault();
 
-    event.preventDefault()
+    // Reset error messages
+    resetErrorMessages();
 
-    const refundInput = document.getElementById('refund');
-    const refundError = document.getElementById('refundError');
-
-    const refundAmount = refundInput.value.trim();
-
-    if (!validateNumber(refundAmount)) {
-        refundError.style.color = "red"
-        refundError.textContent = 'Invalid refund amount. Please enter a valid number.';
+    // Validate Payment Method
+    const paymentMethod = document.getElementById('paymentMethod').value;
+    if (paymentMethod === '') {
+        displayError('paymentMethodError', 'Please select a payment method');
         return;
     }
 
-    refundError.textContent = '';
+    // Validate Other Payment Method if "Other" is selected
+    if (paymentMethod === 'other') {
+        const otherMethod = document.getElementById('otherMethod').value.trim();
+        if (otherMethod === '') {
+            displayError('otherMethodError', 'Please specify the other payment method');
+            return;
+        }
+    }
 
+    // Validate PaymentId
+    const paymentId = document.getElementById('paymentId').value.trim();
+    if (paymentId === '') {
+        displayError('paymentIdError', 'Please enter the paymentId');
+        return;
+    }
+
+    // Validate Amount
+    const refundAmount = document.getElementById('refund').value.trim();
+    if (refundAmount === '' || isNaN(refundAmount) || parseFloat(refundAmount) <= 0) {
+        displayError('refundError', 'Please enter a valid refund amount');
+        return;
+    }
+
+    // Prepare data for the Fetch API
     const requestData = {
-        amount: parseFloat(refundAmount)
+        amount: parseFloat(refundAmount),
+        paymentMethod: paymentMethod !== 'other' ? paymentMethod : otherMethod,
+        paymentId: paymentId,
     };
 
+    // Fetch API call to send the form data to the server
     fetch('http://localhost:4000/api/refund', {
         method: 'POST',
         headers: {
@@ -284,15 +287,19 @@ function submitRefund(event) {
     })
         .then(response => response.json())
         .then(data => {
+            console.log("data", data);
+            // Handle the response data
             if (data.success) {
-                document.getElementById('refund').value = ""
-                refundError.style.color = "green"
+                document.getElementById('refund').value = "";
+                document.getElementById('paymentMethod').value = "";
+                document.getElementById('otherMethod').value = "";
+                document.getElementById('paymentId').value = "";
                 refundError.textContent = data.success;
                 setTimeout(() => {
                     refundError.textContent = '';
                 }, 5000);
             } else {
-                refundError.style.color = "red"
+                refundError.style.color = 'red';
                 refundError.textContent = data.error;
                 setTimeout(() => {
                     refundError.textContent = '';
@@ -301,7 +308,37 @@ function submitRefund(event) {
         })
         .catch(error => {
             console.error('Error:', error);
+            refundError.style.color = 'red';
+            refundError.textContent = 'An error occurred. Please try again later.';
         });
+}
+
+function resetErrorMessages() {
+    document.getElementById('paymentMethodError').textContent = '';
+    document.getElementById('otherMethodError').textContent = '';
+    document.getElementById('paymentIdError').textContent = '';
+    document.getElementById('refundError').textContent = '';
+}
+
+function displayError(elementId, errorMessage) {
+    document.getElementById(elementId).textContent = errorMessage;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    var paymentMethodSelect = document.getElementById("paymentMethod");
+    var otherPaymentMethodDiv = document.getElementById("otherPaymentMethod");
+
+    paymentMethodSelect.addEventListener("change", function () {
+        handlePaymentMethodChange(paymentMethodSelect, otherPaymentMethodDiv);
+    });
+});
+
+function handlePaymentMethodChange(selectElement, otherMethodDiv) {
+    if (selectElement.value === "other") {
+        otherMethodDiv.style.display = "block";
+    } else {
+        otherMethodDiv.style.display = "none";
+    }
 }
 
 // ALL refunds

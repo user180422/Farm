@@ -55,7 +55,13 @@ function validateAndSubmit(event) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = "index.html#pricing"
+
+                    if(data.role == 'user'){
+                        window.location.href = "index.html#pricing"
+                    } else{
+                        window.location.href = "/admin"
+                    }
+
                 } else {
                     failedMsg.innerHTML = data.error
                     setTimeout(() => {
