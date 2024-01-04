@@ -61,81 +61,81 @@
         }
       });
     }
-    if ($("#transaction-history").length) {
-      var areaData = {
-        labels: ["Paypal", "Stripe", "Cash"],
-        datasets: [{
-          data: [55, 25, 20],
-          backgroundColor: [
-            "#111111", "#00d25b", "#ffab00"
-          ]
-        }
-        ]
-      };
-      var areaOptions = {
-        responsive: true,
-        maintainAspectRatio: true,
-        segmentShowStroke: false,
-        cutoutPercentage: 70,
-        elements: {
-          arc: {
-            borderWidth: 0
-          }
-        },
-        legend: {
-          display: false
-        },
-        tooltips: {
-          enabled: true
-        }
-      }
-      var transactionhistoryChartPlugins = {
-        beforeDraw: function (chart) {
-          var width = chart.chart.width,
-            height = chart.chart.height,
-            ctx = chart.chart.ctx;
+    // if ($("#transaction-history").length) {
+    //   var areaData = {
+    //     labels: ["Profit", "Refund"],
+    //     datasets: [{
+    //       data: [totalProfit, 1000],
+    //       backgroundColor: [
+    //         "#23fa14", "#e8f002" 
+    //       ]
+    //     }
+    //     ]
+    //   };
+    //   var areaOptions = {
+    //     responsive: true,
+    //     maintainAspectRatio: true,
+    //     segmentShowStroke: false,
+    //     cutoutPercentage: 70,
+    //     elements: {
+    //       arc: {
+    //         borderWidth: 0
+    //       }
+    //     },
+    //     legend: {
+    //       display: false
+    //     },
+    //     tooltips: {
+    //       enabled: true
+    //     }
+    //   }
+    //   var transactionhistoryChartPlugins = {
+    //     beforeDraw: function (chart) {
+    //       var width = chart.chart.width,
+    //         height = chart.chart.height,
+    //         ctx = chart.chart.ctx;
 
-          ctx.restore();
-          var fontSize = 1;
-          ctx.font = fontSize + "rem sans-serif";
-          ctx.textAlign = 'left';
-          ctx.textBaseline = "middle";
-          ctx.fillStyle = "#ffffff";
+    //       ctx.restore();
+    //       var fontSize = 1;
+    //       ctx.font = fontSize + "rem sans-serif";
+    //       ctx.textAlign = 'left';
+    //       ctx.textBaseline = "middle";
+    //       ctx.fillStyle = "#ffffff";
 
-          var text = "$1200",
-            textX = Math.round((width - ctx.measureText(text).width) / 2),
-            textY = height / 2.4;
+    //       var text = '',
+    //         textX = Math.round((width - ctx.measureText(text).width) / 2),
+    //         textY = height / 2.4;
 
-          ctx.fillText(text, textX, textY);
+    //       ctx.fillText(text, textX, textY);
 
-          ctx.restore();
-          var fontSize = 0.75;
-          ctx.font = fontSize + "rem sans-serif";
-          ctx.textAlign = 'left';
-          ctx.textBaseline = "middle";
-          ctx.fillStyle = "#6c7293";
+    //       ctx.restore();
+    //       var fontSize = 0.75;
+    //       ctx.font = fontSize + "rem sans-serif";
+    //       ctx.textAlign = 'left';
+    //       ctx.textBaseline = "middle";
+    //       ctx.fillStyle = "#6c7293";
 
-          var texts = "Total",
-            textsX = Math.round((width - ctx.measureText(text).width) / 1.93),
-            textsY = height / 1.7;
+    //       var texts = "",
+    //         textsX = Math.round((width - ctx.measureText(text).width) / 1.93),
+    //         textsY = height / 1.7;
 
-          ctx.fillText(texts, textsX, textsY);
-          ctx.save();
-        }
-      }
-      var transactionhistoryChartCanvas = $("#transaction-history").get(0).getContext("2d");
-      var transactionhistoryChart = new Chart(transactionhistoryChartCanvas, {
-        type: 'doughnut',
-        data: areaData,
-        options: areaOptions,
-        plugins: transactionhistoryChartPlugins
-      });
-    }
+    //       ctx.fillText(texts, textsX, textsY);
+    //       ctx.save();
+    //     }
+    //   }
+    //   var transactionhistoryChartCanvas = $("#transaction-history").get(0).getContext("2d");
+    //   var transactionhistoryChart = new Chart(transactionhistoryChartCanvas, {
+    //     type: 'doughnut',
+    //     data: areaData,
+    //     options: areaOptions,
+    //     plugins: transactionhistoryChartPlugins
+    //   });
+    // }
     if ($("#transaction-history-arabic").length) {
       var areaData = {
-        labels: ["Paypal", "Stripe", "Cash"],
+        labels: ["Profit", "Refund"],
         datasets: [{
-          data: [55, 25, 20],
+          data: [55, 25],
           backgroundColor: [
             "#111111", "#00d25b", "#ffab00"
           ]
@@ -172,7 +172,7 @@
           ctx.textBaseline = "middle";
           ctx.fillStyle = "#ffffff";
 
-          var text = "$1200",
+          var text = '',
             textX = Math.round((width - ctx.measureText(text).width) / 2),
             textY = height / 2.4;
 
@@ -302,3 +302,194 @@ function logout() {
   document.cookie = "farmAdmin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   window.location.href = 'index.html';
 }
+
+function projectData() {
+
+  fetch('http://localhost:4000/api/projectData', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+  })
+    .then(response => response.json())
+    .then(data => {
+
+      console.log("data", data);
+
+      // project status
+      const statusCounts = data.data.statusCounts
+      document.getElementById('totalProject').textContent = statusCounts.totalCount;
+      document.getElementById('completedProject').textContent = statusCounts.completed || 0;
+      document.getElementById('processingProject').textContent = statusCounts.process || 0;
+      document.getElementById('failedProject').textContent = statusCounts.failed || 0;
+
+      // totalAmount
+      const totalProfit = data.data.totalAmount
+      const totalRefund = data.data.refundAmount
+      createTransactionHistoryChart(totalProfit, totalRefund);
+      document.getElementById("profit").textContent = `$${totalProfit}` || 0;
+      document.getElementById("refund").textContent = `$${totalRefund}` || 0;
+
+      // quotesData
+      const quotesData = data.data.quotesData
+      const messageContainer = document.getElementById("messageContainer")
+      if (quotesData.length > 4) {
+        for (let i = 0; i < 4; i++) {
+
+          const dateObject = new Date(quotesData[i].createdAt);
+          const day = String(dateObject.getUTCDate()).padStart(2, "0");
+          const month = String(dateObject.getUTCMonth() + 1).padStart(2, "0");
+          const year = String(dateObject.getUTCFullYear());
+          const formattedDate = day + '-' + month + '-' + year;
+
+          messageContainer.innerHTML += `
+            <div class="preview-item border-bottom">
+              <div class="preview-item-content d-flex flex-grow">
+                <div class="flex-grow">
+                  <div class="d-flex d-md-block d-xl-flex justify-content-between">
+                    <h6 class="preview-subject">${quotesData[i].name}</h6>
+                    <p class="text-muted text-small">${formattedDate}</p>
+                  </div>
+                  <p class="text-muted">${quotesData[i].quote.length > 40 ? `${quotesData[i].quote.substring(0, 40)}...` : quotesData[i].quote}</p>
+                </div>
+              </div>
+            </div>
+          `
+        }
+      } else {
+        quotesData.length > 0
+          ? quotesData.forEach(item => {
+
+            const dateObject = new Date(item.createdAt);
+            const day = String(dateObject.getUTCDate()).padStart(2, "0");
+            const month = String(dateObject.getUTCMonth() + 1).padStart(2, "0");
+            const year = String(dateObject.getUTCFullYear());
+            const formattedDate = day + '-' + month + '-' + year;
+
+            messageContainer.innerHTML += `
+            <div class="preview-item border-bottom">
+              <div class="preview-item-content d-flex flex-grow">
+                <div class="flex-grow">
+                  <div class="d-flex d-md-block d-xl-flex justify-content-between">
+                    <h6 class="preview-subject">${item.name}</h6>
+                    <p class="text-muted text-small">${formattedDate}</p>
+                  </div>
+                  <p class="text-muted">${item.quote.length > 40 ? `${item.quote.substring(0, 40)}...` : item.quote}</p>
+                </div>
+              </div>
+            </div>
+          `;
+          })
+          : (messageContainer.innerHTML = `
+              <div class="text-center">
+                <p class="text-danger">No Messages to show</p>
+              </div>
+            `);
+      }
+
+      // user
+      const userData = data.data.users
+      const tableBodyContainer = document.getElementById('table-data');
+      const noUserContainer = document.getElementById('no-user-data')
+      userData.length > 0 ? userData.forEach(user => {
+        tableBodyContainer.innerHTML += `
+        <tr>
+          <td>
+            <span>${user.username}</span>
+          </td>
+          <td>${user.email}</td>
+          <td>${user.totalPrice == undefined ? 0 : user.totalPrice}</td>
+          <td>${user.priceUsed}</td>
+          <td>
+            <a class="text-decoration-none" href="userDetail.html?id=${user.email}">View</a>
+          </td>
+        </tr>
+        `;
+      }) : (noUserContainer.innerHTML = `
+        <div class="text-center">
+          <p class="text-danger px-5 py-2">No users to show</p>
+        </div>
+      `);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
+}
+
+projectData()
+
+function createTransactionHistoryChart(profit, refund) {
+
+  if ($("#transaction-history").length) {
+    var areaData = {
+      labels: ["Profit", "Refund"],
+      datasets: [{
+        data: [profit, refund],
+        backgroundColor: [
+          "#23fa14", "#e8f002"
+        ]
+      }]
+    };
+    var areaOptions = {
+      responsive: true,
+      maintainAspectRatio: true,
+      segmentShowStroke: false,
+      cutoutPercentage: 70,
+      elements: {
+        arc: {
+          borderWidth: 0
+        }
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: true
+      }
+    }
+    var transactionhistoryChartPlugins = {
+      beforeDraw: function (chart) {
+        var width = chart.chart.width,
+          height = chart.chart.height,
+          ctx = chart.chart.ctx;
+
+        ctx.restore();
+        var fontSize = 1;
+        ctx.font = fontSize + "rem sans-serif";
+        ctx.textAlign = 'left';
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#ffffff";
+
+        var text = `$${profit}`,
+          textX = Math.round((width - ctx.measureText(text).width) / 2),
+          textY = height / 2.4;
+
+        ctx.fillText(text, textX, textY);
+
+        ctx.restore();
+        var fontSize = 0.75;
+        ctx.font = fontSize + "rem sans-serif";
+        ctx.textAlign = 'left';
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#6c7293";
+
+        var texts = "Total",
+          textsX = Math.round((width - ctx.measureText(text).width) / 1.93),
+          textsY = height / 1.7;
+
+        ctx.fillText(texts, textsX, textsY);
+        ctx.save();
+      }
+    }
+    var transactionhistoryChartCanvas = $("#transaction-history").get(0).getContext("2d");
+    var transactionhistoryChart = new Chart(transactionhistoryChartCanvas, {
+      type: 'doughnut',
+      data: areaData,
+      options: areaOptions,
+      plugins: transactionhistoryChartPlugins
+    });
+  }
+}
+

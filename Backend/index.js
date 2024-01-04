@@ -18,6 +18,7 @@ const quoteRoutes = require('./routes/quoteRouter')
 const pricingRoute = require('./routes/pricingRouter')
 const renderRoute = require('./routes/renderRoute')
 const dashboardRoute = require('./routes/dashboardRouter')
+const adminRoute = require('./routes/adminRoutes')
 
 // App Middlewares
 
@@ -34,7 +35,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/admin'));
+    res.sendFile(path.join(__dirname, 'public', 'admin', 'index.html'));
 });
 
 app.get('/dashboard', (req, res) => {
@@ -49,6 +50,7 @@ app.use('/api', quoteRoutes)
 app.use('/api', pricingRoute)
 app.use('/api', renderRoute)
 app.use('/api', dashboardRoute)
+app.use('/api', adminRoute)
 
 // Server and databse
 

@@ -96,14 +96,14 @@
           </a>
         </li>
         <li class="nav-item menu-items">
-          <a class="nav-link" href="message.html">
+          <a class="nav-link"
+            href="message.html">
             <span class="menu-icon">
               <i class="mdi mdi-file-document-box"></i>
             </span>
             <span class="menu-title">Quotes</span>
           </a>
         </li>
-
         <li class="nav-item menu-items">
           <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
             <span class="menu-icon">
@@ -122,7 +122,6 @@
             </ul>
           </div>
         </li>
-
       </ul>
     </nav>
     <!-- partial -->
@@ -138,7 +137,6 @@
             <span class="mdi mdi-menu"></span>
           </button>
           <ul class="navbar-nav navbar-nav-right">
-
             <li class="nav-item dropdown">
               <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                 <div class="navbar-profile">
@@ -149,7 +147,6 @@
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
                 aria-labelledby="profileDropdown">
-
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
@@ -175,167 +172,18 @@
       <div class="main-panel">
         <div class="content-wrapper">
 
-          <div class="row">
-            <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-9">
-                      <div class="d-flex align-items-center align-self-start">
-                        <h3 class="mb-0" id="totalProject">0</h3>
-                      </div>
-                    </div>
-                    <div class="col-3">
-                      <div class="icon icon-box-success ">
-                        <span class="mdi mdi-arrow-top-right icon-item"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <h6 class="text-muted font-weight-normal">Total Projects</h6>
+          <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex flex-row justify-content-between">
+                  <h4 class="card-title">Messages</h4>
+                  </p>
                 </div>
-              </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-9">
-                      <div class="d-flex align-items-center align-self-start">
-                        <h3 class="mb-0" id="completedProject">0</h3>
-                        <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+11%</p> -->
-                      </div>
-                    </div>
-                    <div class="col-3">
-                      <div class="icon icon-box-success">
-                        <span class="mdi mdi-arrow-top-right icon-item"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <h6 class="text-muted font-weight-normal">Completed Projects</h6>
-                </div>
-              </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-9">
-                      <div class="d-flex align-items-center align-self-start">
-                        <h3 class="mb-0" id="processingProject">0</h3>
-                        <!-- <p class="text-danger ml-2 mb-0 font-weight-medium">-2.4%</p> -->
-                      </div>
-                    </div>
-                    <div class="col-3">
-                      <div class="icon icon-box-success ">
-                        <span class="mdi mdi-arrow-top-right icon-item"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <h6 class="text-muted font-weight-normal">Processing Projects</h6>
-                </div>
-              </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-9">
-                      <div class="d-flex align-items-center align-self-start">
-                        <h3 class="mb-0" id="failedProject">0</h3>
-                        <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p> -->
-                      </div>
-                    </div>
-                    <div class="col-3">
-                      <div class="icon icon-box-success ">
-                        <span class="mdi mdi-arrow-top-right icon-item"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <h6 class="text-muted font-weight-normal">Failed Projects</h6>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Transaction History</h4>
-                  <canvas id="transaction-history" class="transaction-chart"></canvas>
-                  <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
-                    <div class="text-md-center text-xl-left">
-                      <h6 class="mb-1">Profit</h6>
-                      <!-- <p class="text-muted mb-0">07 Jan 2019, 09:12AM</p> -->
-                    </div>
-                    <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
-                      <h6 class="font-weight-bold mb-0" id="profit">0</h6>
-                    </div>
-                  </div>
-                  <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
-                    <div class="text-md-center text-xl-left">
-                      <h6 class="mb-1">Refund</h6>
-                      <!-- <p class="text-muted mb-0">07 Jan 2019, 09:12AM</p> -->
-                    </div>
-                    <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
-                      <h6 class="font-weight-bold mb-0" id="refund">0</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
+                <div class="preview-list" id="messageContainer">
 
-            <div class="col-md-8 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <div class="d-flex flex-row justify-content-between">
-                    <h4 class="card-title">Messages</h4>
-                    <p class="text-muted mb-1 small"><a href="message.html" class="text-decoration-none text-white">View
-                        all</a>
-                    </p>
-                  </div>
-                  <div class="preview-list" id="messageContainer">
-                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
 
-          <div class="row ">
-            <div class="col-12 grid-margin">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Clients</h4>
-                  <div class="table-responsive">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th> Client Name </th>
-                          <th> Email </th>
-                          <th> Balance Amount </th>
-                          <th> Amount Spend </th>
-                          <th> Action </th>
-                        </tr>
-                      </thead>
-                      <tbody id="table-data">
-                        <!-- <tr>
-                          <td>
-                            <span>Henry Klein</span>
-                          </td>
-                          <td> inb498@gmail.com </td>
-                          <td> $14,500 </td>
-                          <td> Dashboard </td>
-                          <td> Credit card </td>
-                          <td>
-                            <a class="text-decoration-none" href="your_link_here">View</a>
-                          </td>
-                        </tr> -->
-
-                      </tbody>
-                    </table>
-                    <div id="no-user-data" class="pt-5"></div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -377,7 +225,7 @@
   <script src="assets/js/todolist.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page -->
-  <script src="assets/js/dashboard.js"></script>
+  <script src="assets/js/userDetail.js"></script>
   <!-- End custom js for this page -->
 </body>
 

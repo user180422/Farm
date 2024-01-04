@@ -26,7 +26,8 @@ exports.quotes = async (req, res) => {
             email,
             countryCode,
             phone,
-            quote
+            quote,
+            createdAt: new Date()
         });
 
         console.log("insertData", insertData);
