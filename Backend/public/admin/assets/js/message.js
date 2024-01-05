@@ -53,6 +53,8 @@ function logout() {
 
 function projectData() {
 
+    const errorContainer = document.getElementById('error-container')
+
     fetch('http://localhost:4000/api/projectData', {
         method: 'GET',
         headers: {
@@ -102,7 +104,9 @@ function projectData() {
                 `);
         })
         .catch(error => {
-            console.error('Error:', error);
+            setTimeout(() => {
+                errorContainer.innerHTML = "Somthing went wrong try later"
+            }, 5000)
         });
 
 }

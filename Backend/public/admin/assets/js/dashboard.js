@@ -291,7 +291,7 @@ if (token) {
         window.location.href = '/login.html';
       }
     })
-    .catch(error => console.error('Fetch error:', error));
+    .catch(error => console.log("error", error))
 } else {
   console.log("No token found, redirecting to login");
   window.location.href = '/login.html';
@@ -304,6 +304,8 @@ function logout() {
 }
 
 function projectData() {
+
+  const errorContainer = document.getElementById('error-container')
 
   fetch('http://localhost:4000/api/projectData', {
     method: 'GET',
@@ -327,9 +329,11 @@ function projectData() {
       // totalAmount
       const totalProfit = data.data.totalAmount
       const totalRefund = data.data.refundAmount
-      createTransactionHistoryChart(totalProfit, totalRefund);
-      document.getElementById("profit").textContent = `$${totalProfit}` || 0;
+      const usedPrice = data.data.usedPrice
+      createTransactionHistoryChart(totalProfit, totalRefund, usedPrice);
+      document.getElementById("deposite").textContent = `$${totalProfit}` || 0;
       document.getElementById("refund").textContent = `$${totalRefund}` || 0;
+      document.getElementById("profit").textContent = `$${usedPrice}` || 0;
 
       // quotesData
       const quotesData = data.data.quotesData
@@ -413,22 +417,26 @@ function projectData() {
       `);
     })
     .catch(error => {
-      console.error('Error:', error);
+      setTimeout(() => {
+        errorContainer.innerHTML = "Somthing went wrong try later"
+      }, 5000)
     });
 
 }
 
 projectData()
 
-function createTransactionHistoryChart(profit, refund) {
+function createTransactionHistoryChart(deposite, refund, profit) {
+
+  console.log("profit", profit);
 
   if ($("#transaction-history").length) {
     var areaData = {
-      labels: ["Profit", "Refund"],
+      labels: ["deposite", "Refund", "Profit"],
       datasets: [{
-        data: [profit, refund],
+        data: [deposite, refund, profit],
         backgroundColor: [
-          "#23fa14", "#e8f002"
+          "#02edf5", "#e8f002", "#23fa14"
         ]
       }]
     };
@@ -462,7 +470,7 @@ function createTransactionHistoryChart(profit, refund) {
         ctx.textBaseline = "middle";
         ctx.fillStyle = "#ffffff";
 
-        var text = `$${profit}`,
+        var text = `$${deposite}`,
           textX = Math.round((width - ctx.measureText(text).width) / 2),
           textY = height / 2.4;
 
